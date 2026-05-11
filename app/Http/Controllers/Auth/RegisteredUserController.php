@@ -31,15 +31,30 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role'     => ['required', 'in:cobrador,admin'],
+            'phone'    => ['nullable', 'string', 'max:20'],
         ]);
 
+        // Si quiere ser admin, verificar contraseña maestra
+        if ($request->role === 'admin') {
+            $masterPassword = config('app.admin_master_password', env('ADMIN_MASTER_PASSWORD', 'SmartPay@Admin2025'));
+            if ($request->admin_password !== $masterPassword) {
+                throw ValidationException::withMessages([
+                    'admin_password' => 'Contraseña de administrador incorrecta.',
+                ]);
+            }
+        }
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
+            'role'     => $request->role,
+            'phone'    => $request->phone,
+            'active'   => true,
         ]);
 
         event(new Registered($user));
