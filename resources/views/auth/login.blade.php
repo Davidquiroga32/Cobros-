@@ -168,7 +168,6 @@
             cursor: pointer; transition: all .2s;
             display: flex; align-items: center; justify-content: center; gap: 10px;
             box-shadow: 0 0 32px rgba(79,142,247,0.3);
-            position: relative; overflow: hidden;
         }
         .btn-submit:hover { background: #3a7af0; transform: translateY(-2px); box-shadow: 0 8px 40px rgba(79,142,247,0.4); }
         .btn-submit:active { transform: translateY(0); }

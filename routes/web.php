@@ -41,35 +41,36 @@ Route::prefix('admin')
 
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // Clientes (CRUD completo)
-        Route::get('/clientes', [AdminClienteController::class, 'index'])->name('clientes.index');
-        Route::get('/clientes/crear', [AdminClienteController::class, 'create'])->name('clientes.create');
-        Route::post('/clientes', [AdminClienteController::class, 'store'])->name('clientes.store');
-        Route::get('/clientes/{cliente}', [AdminClienteController::class, 'show'])->name('clientes.show');
+        // ── Clientes (CRUD completo) ──────────────────────────────────────────
+        Route::get('/clientes',                [AdminClienteController::class, 'index'])->name('clientes.index');
+        Route::get('/clientes/crear',          [AdminClienteController::class, 'create'])->name('clientes.create');
+        Route::post('/clientes',               [AdminClienteController::class, 'store'])->name('clientes.store');
+        Route::get('/clientes/{cliente}',      [AdminClienteController::class, 'show'])->name('clientes.show');
         Route::get('/clientes/{cliente}/editar', [AdminClienteController::class, 'edit'])->name('clientes.edit');
-        Route::put('/clientes/{cliente}', [AdminClienteController::class, 'update'])->name('clientes.update');
-        Route::delete('/clientes/{cliente}', [AdminClienteController::class, 'destroy'])->name('clientes.destroy');
+        Route::put('/clientes/{cliente}',      [AdminClienteController::class, 'update'])->name('clientes.update');
+        Route::delete('/clientes/{cliente}',   [AdminClienteController::class, 'destroy'])->name('clientes.destroy');
 
-        // Créditos
-        Route::get('/creditos', [AdminCreditoController::class, 'index'])->name('creditos.index');
-        Route::get('/creditos/crear', [AdminCreditoController::class, 'create'])->name('creditos.create');
-        Route::post('/creditos', [AdminCreditoController::class, 'store'])->name('creditos.store');
-        Route::get('/creditos/{credito}', [AdminCreditoController::class, 'show'])->name('creditos.show');
-        Route::delete('/creditos/{credito}', [AdminCreditoController::class, 'destroy'])->name('creditos.destroy');
+        // ── Créditos ──────────────────────────────────────────────────────────
+        Route::get('/creditos',                [AdminCreditoController::class, 'index'])->name('creditos.index');
+        Route::get('/creditos/crear',          [AdminCreditoController::class, 'create'])->name('creditos.create');
+        Route::post('/creditos',               [AdminCreditoController::class, 'store'])->name('creditos.store');
+        Route::get('/creditos/{credito}',      [AdminCreditoController::class, 'show'])->name('creditos.show');
+        Route::delete('/creditos/{credito}',   [AdminCreditoController::class, 'destroy'])->name('creditos.destroy');
 
-        // API: clientes por cobrador (para AJAX)
-        Route::get('/api/cobrador/{cobrador}/clientes', [AdminCreditoController::class, 'clientesPorCobrador'])->name('api.clientes-por-cobrador');
+        // ── API: clientes por cobrador (AJAX) ─────────────────────────────────
+        Route::get('/api/cobrador/{cobrador}/clientes', [AdminCreditoController::class, 'clientesPorCobrador'])
+            ->name('api.clientes-por-cobrador');
 
-        // Usuarios / Cobradores
-        Route::get('/usuarios', [AdminUserController::class, 'index'])->name('usuarios.index');
-        Route::get('/usuarios/crear', [AdminUserController::class, 'create'])->name('usuarios.create');
-        Route::post('/usuarios', [AdminUserController::class, 'store'])->name('usuarios.store');
+        // ── Usuarios / Cobradores ─────────────────────────────────────────────
+        Route::get('/usuarios',                [AdminUserController::class, 'index'])->name('usuarios.index');
+        Route::get('/usuarios/crear',          [AdminUserController::class, 'create'])->name('usuarios.create');
+        Route::post('/usuarios',               [AdminUserController::class, 'store'])->name('usuarios.store');
         Route::get('/usuarios/{usuario}/editar', [AdminUserController::class, 'edit'])->name('usuarios.edit');
-        Route::put('/usuarios/{usuario}', [AdminUserController::class, 'update'])->name('usuarios.update');
+        Route::put('/usuarios/{usuario}',      [AdminUserController::class, 'update'])->name('usuarios.update');
         Route::patch('/usuarios/{usuario}/toggle', [AdminUserController::class, 'toggleActive'])->name('usuarios.toggle');
     });
 
-// Redirect after login based on role
+// ─── DASHBOARD (redirect por rol) ─────────────────────────────────────────────
 Route::get('/dashboard', function () {
     return match (auth()->user()->role) {
         'admin'    => redirect()->route('admin.dashboard'),
