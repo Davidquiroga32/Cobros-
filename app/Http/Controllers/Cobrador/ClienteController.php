@@ -17,7 +17,6 @@ class ClienteController extends Controller
             ->delCobrador($cobrador->id)
             ->activos();
 
-        // Búsqueda
         if ($search = $request->get('buscar')) {
             $query->where(function ($q) use ($search) {
                 $q->where('nombre', 'like', "%{$search}%")
@@ -26,18 +25,15 @@ class ClienteController extends Controller
             });
         }
 
-        // Filtro de mora
         if ($request->get('filtro') === 'mora') {
             $query->enMora();
         }
 
         $clientes = $query->orderBy('nombre')->paginate(12)->withQueryString();
 
-        // Estadísticas
         $totalClientes  = $cobrador->clientes()->activos()->count();
         $clientesEnMora = $cobrador->clientes()->enMora()->count();
 
-        // Fix: qualify cobrador_id to avoid ambiguity with the join
         $saldoTotal = Cliente::query()
             ->where('clientes.cobrador_id', $cobrador->id)
             ->join('creditos', 'clientes.id', '=', 'creditos.cliente_id')
@@ -52,7 +48,6 @@ class ClienteController extends Controller
 
     public function show(Cliente $cliente)
     {
-        // Solo puede ver sus propios clientes
         abort_if($cliente->cobrador_id !== Auth::id(), 403);
 
         $cliente->load([
@@ -73,5 +68,41 @@ class ClienteController extends Controller
         return view('cobrador.clientes.show', compact(
             'cliente', 'creditoActivo', 'historialPagos', 'cuotasProximas'
         ));
+    }
+
+    public function create()
+    {
+        return view('cobrador.clientes.create');
+    }
+
+    public function store(Request $request)
+    {
+        $cobrador = Auth::user();
+
+        $validated = $request->validate([
+            'nombre'               => ['required', 'string', 'max:255'],
+            'cedula'               => ['nullable', 'string', 'max:20', 'unique:clientes'],
+            'telefono'             => ['required', 'string', 'max:20'],
+            'telefono_alt'         => ['nullable', 'string', 'max:20'],
+            'direccion'            => ['required', 'string', 'max:500'],
+            'barrio'               => ['nullable', 'string', 'max:100'],
+            'ciudad'               => ['nullable', 'string', 'max:100'],
+            'referencia_ubicacion' => ['nullable', 'string', 'max:500'],
+            'notas'                => ['nullable', 'string', 'max:1000'],
+        ], [
+            'nombre.required'    => 'El nombre es obligatorio.',
+            'telefono.required'  => 'El teléfono es obligatorio.',
+            'direccion.required' => 'La dirección es obligatoria.',
+            'cedula.unique'      => 'Ya existe un cliente con esa cédula.',
+        ]);
+
+        $cliente = Cliente::create(array_merge($validated, [
+            'cobrador_id' => $cobrador->id,
+            'estado'      => 'activo',
+            'ciudad'      => $validated['ciudad'] ?? 'Villavicencio',
+        ]));
+
+        return redirect()->route('cobrador.clientes.show', $cliente)
+            ->with('success', "✅ Cliente '{$cliente->nombre}' registrado exitosamente.");
     }
 }

@@ -11,7 +11,10 @@ class ClienteController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Cliente::with(['cobrador', 'creditoActivo'])
+        $query = Cliente::with([
+                'cobrador',
+                'creditos' => fn ($q) => $q->whereIn('estado', ['activo', 'al_dia', 'mora'])->latest()->limit(1),
+            ])
             ->withCount('creditos');
 
         if ($search = $request->get('buscar')) {
@@ -34,7 +37,7 @@ class ClienteController extends Controller
             $query->whereHas('creditos', fn ($q) => $q->where('estado', 'mora'));
         }
 
-        $clientes  = $query->orderBy('nombre')->paginate(20)->withQueryString();
+        $clientes   = $query->orderBy('nombre')->paginate(20)->withQueryString();
         $cobradores = User::where('role', 'cobrador')->where('active', true)->orderBy('name')->get();
 
         $totalClientes   = Cliente::count();
@@ -75,7 +78,11 @@ class ClienteController extends Controller
 
     public function show(Cliente $cliente)
     {
-        $cliente->load(['cobrador', 'creditos.cuotas', 'pagos' => fn ($q) => $q->latest()->take(20)]);
+        $cliente->load([
+            'cobrador',
+            'creditos.cuotas',
+            'pagos' => fn ($q) => $q->latest()->take(20),
+        ]);
         $cobradores = User::where('role', 'cobrador')->where('active', true)->orderBy('name')->get();
         return view('admin.clientes.show', compact('cliente', 'cobradores'));
     }

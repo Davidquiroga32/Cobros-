@@ -6,7 +6,7 @@
     <form method="GET" action="{{ route('cobrador.clientes.index') }}" class="flex items-center gap-2">
         <input type="text" name="buscar" value="{{ request('buscar') }}"
             placeholder="Buscar cliente..." class="form-control"
-            style="width: 220px; padding: 6px 12px; font-size:13px;">
+            style="width: 200px; padding: 6px 12px; font-size:13px;">
         <button type="submit" class="btn btn-secondary btn-sm"><i class="fas fa-search"></i></button>
         @if(request('buscar') || request('filtro'))
             <a href="{{ route('cobrador.clientes.index') }}" class="btn btn-secondary btn-sm">
@@ -14,6 +14,9 @@
             </a>
         @endif
     </form>
+    <a href="{{ route('cobrador.clientes.create') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-user-plus"></i> Nuevo cliente
+    </a>
 @endsection
 
 @push('styles')
@@ -46,7 +49,6 @@
     .cliente-avatar-lg { width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; }
     .cliente-name { font-size: 15px; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
     .cliente-cedula { font-size: 12px; color: var(--text-2); }
-    .cliente-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
     .client-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
     .client-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
     .detail-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -142,7 +144,7 @@
                 <div class="cliente-name truncate">{{ $cliente->nombre }}</div>
                 <div class="cliente-cedula">{{ $cliente->cedula ?? 'Sin cédula' }}</div>
             </div>
-            <div class="cliente-badges">
+            <div>
                 @if($enMora)
                     <span class="tag danger" style="font-size:10px;"><i class="fas fa-triangle-exclamation"></i> Mora</span>
                 @elseif($creditoActivo)
@@ -221,7 +223,14 @@
             @else No tienes clientes asignados
             @endif
         </p>
-        <p>@if(request('buscar') || request('filtro'))<a href="{{ route('cobrador.clientes.index') }}" style="color: var(--accent);">Limpiar filtros</a>@endif</p>
+        <p style="margin-bottom: 16px;">
+            @if(request('buscar') || request('filtro'))
+                <a href="{{ route('cobrador.clientes.index') }}" style="color: var(--accent);">Limpiar filtros</a>
+            @endif
+        </p>
+        <a href="{{ route('cobrador.clientes.create') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Registrar primer cliente
+        </a>
     </div>
 </div>
 @endif

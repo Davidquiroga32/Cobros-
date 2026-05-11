@@ -21,8 +21,10 @@ Route::prefix('cobrador')
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         // Clientes
-        Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
-        Route::get('/clientes/{cliente}', [ClienteController::class, 'show'])->name('clientes.show');
+        Route::get('/clientes',                [ClienteController::class, 'index'])->name('clientes.index');
+        Route::get('/clientes/crear',          [ClienteController::class, 'create'])->name('clientes.create');
+        Route::post('/clientes',               [ClienteController::class, 'store'])->name('clientes.store');
+        Route::get('/clientes/{cliente}',      [ClienteController::class, 'show'])->name('clientes.show');
 
         // Agenda de cobro
         Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda');
@@ -42,13 +44,13 @@ Route::prefix('admin')
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // ── Clientes (CRUD completo) ──────────────────────────────────────────
-        Route::get('/clientes',                [AdminClienteController::class, 'index'])->name('clientes.index');
-        Route::get('/clientes/crear',          [AdminClienteController::class, 'create'])->name('clientes.create');
-        Route::post('/clientes',               [AdminClienteController::class, 'store'])->name('clientes.store');
-        Route::get('/clientes/{cliente}',      [AdminClienteController::class, 'show'])->name('clientes.show');
+        Route::get('/clientes',                  [AdminClienteController::class, 'index'])->name('clientes.index');
+        Route::get('/clientes/crear',            [AdminClienteController::class, 'create'])->name('clientes.create');
+        Route::post('/clientes',                 [AdminClienteController::class, 'store'])->name('clientes.store');
+        Route::get('/clientes/{cliente}',        [AdminClienteController::class, 'show'])->name('clientes.show');
         Route::get('/clientes/{cliente}/editar', [AdminClienteController::class, 'edit'])->name('clientes.edit');
-        Route::put('/clientes/{cliente}',      [AdminClienteController::class, 'update'])->name('clientes.update');
-        Route::delete('/clientes/{cliente}',   [AdminClienteController::class, 'destroy'])->name('clientes.destroy');
+        Route::put('/clientes/{cliente}',        [AdminClienteController::class, 'update'])->name('clientes.update');
+        Route::delete('/clientes/{cliente}',     [AdminClienteController::class, 'destroy'])->name('clientes.destroy');
 
         // ── Créditos ──────────────────────────────────────────────────────────
         Route::get('/creditos',                [AdminCreditoController::class, 'index'])->name('creditos.index');
@@ -62,11 +64,11 @@ Route::prefix('admin')
             ->name('api.clientes-por-cobrador');
 
         // ── Usuarios / Cobradores ─────────────────────────────────────────────
-        Route::get('/usuarios',                [AdminUserController::class, 'index'])->name('usuarios.index');
-        Route::get('/usuarios/crear',          [AdminUserController::class, 'create'])->name('usuarios.create');
-        Route::post('/usuarios',               [AdminUserController::class, 'store'])->name('usuarios.store');
-        Route::get('/usuarios/{usuario}/editar', [AdminUserController::class, 'edit'])->name('usuarios.edit');
-        Route::put('/usuarios/{usuario}',      [AdminUserController::class, 'update'])->name('usuarios.update');
+        Route::get('/usuarios',                    [AdminUserController::class, 'index'])->name('usuarios.index');
+        Route::get('/usuarios/crear',              [AdminUserController::class, 'create'])->name('usuarios.create');
+        Route::post('/usuarios',                   [AdminUserController::class, 'store'])->name('usuarios.store');
+        Route::get('/usuarios/{usuario}/editar',   [AdminUserController::class, 'edit'])->name('usuarios.edit');
+        Route::put('/usuarios/{usuario}',          [AdminUserController::class, 'update'])->name('usuarios.update');
         Route::patch('/usuarios/{usuario}/toggle', [AdminUserController::class, 'toggleActive'])->name('usuarios.toggle');
     });
 
