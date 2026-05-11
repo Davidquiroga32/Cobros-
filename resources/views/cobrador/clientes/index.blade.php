@@ -18,14 +18,8 @@
 
 @push('styles')
 <style>
-    /* Stats strip */
     .client-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-
-    .cs-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: var(--radius); padding: 16px 20px;
-        display: flex; align-items: center; gap: 14px;
-    }
+    .cs-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
     .cs-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
     .cs-icon.blue { background: var(--accent-glow); color: var(--accent); }
     .cs-icon.red { background: var(--danger-soft); color: var(--danger); }
@@ -33,73 +27,38 @@
     .cs-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.6px; }
     .cs-value { font-size: 22px; font-weight: 700; font-family: var(--font-mono); color: var(--text-1); }
 
-    /* Filtros */
     .filtros { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-    .filtro-btn {
-        padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
-        border: 1px solid var(--border); background: var(--bg-card-2);
-        color: var(--text-2); cursor: pointer; text-decoration: none; transition: all .15s;
-    }
+    .filtro-btn { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); background: var(--bg-card-2); color: var(--text-2); cursor: pointer; text-decoration: none; transition: all .15s; }
     .filtro-btn:hover { border-color: var(--border-light); color: var(--text-1); }
     .filtro-btn.active { background: var(--accent-glow); border-color: rgba(79,142,247,0.3); color: var(--accent); }
     .filtro-btn.mora.active { background: var(--danger-soft); border-color: rgba(239,68,68,0.3); color: var(--danger); }
 
-    /* Grid de clientes */
     .clientes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
 
-    .cliente-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: var(--radius-lg); padding: 20px;
-        transition: all .18s; text-decoration: none; display: block;
-        position: relative; overflow: hidden;
-    }
-
-    .cliente-card::before {
-        content: ''; position: absolute; top: 0; left: 0; right: 0;
-        height: 3px; background: var(--accent); opacity: 0;
-        transition: opacity .15s;
-    }
-
+    .cliente-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; transition: all .18s; text-decoration: none; display: block; position: relative; overflow: hidden; }
+    .cliente-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); opacity: 0; transition: opacity .15s; }
     .cliente-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
     .cliente-card:hover::before { opacity: 1; }
     .cliente-card.mora-card::before { opacity: 1; background: var(--danger); }
     .cliente-card.mora-card { border-color: rgba(239,68,68,0.2); }
 
     .card-header-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
-
-    .cliente-avatar-lg {
-        width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 18px; font-weight: 700; color: white;
-    }
-
+    .cliente-avatar-lg { width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; }
     .cliente-name { font-size: 15px; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
     .cliente-cedula { font-size: 12px; color: var(--text-2); }
-
     .cliente-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
-
     .client-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
-
     .client-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-
-    .detail-item { }
     .detail-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; }
     .detail-value { font-size: 13px; color: var(--text-1); font-weight: 500; margin-top: 1px; }
     .detail-value.money { font-family: var(--font-mono); color: var(--accent); }
     .detail-value.danger { font-family: var(--font-mono); color: var(--danger); }
-
     .card-footer-row { display: flex; align-items: center; justify-content: space-between; }
-
     .progress-mini { height: 4px; background: var(--bg-card-2); border-radius: 4px; overflow: hidden; flex: 1; margin: 0 10px; }
     .progress-mini-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
 
-    /* Pagination */
     .pagination-wrap { margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .page-btn {
-        padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
-        border: 1px solid var(--border); background: var(--bg-card-2); color: var(--text-2);
-        text-decoration: none; transition: all .12s; cursor: pointer;
-    }
+    .page-btn { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--border); background: var(--bg-card-2); color: var(--text-2); text-decoration: none; transition: all .12s; cursor: pointer; }
     .page-btn:hover { border-color: var(--border-light); color: var(--text-1); }
     .page-btn.active { background: var(--accent-glow); border-color: rgba(79,142,247,0.3); color: var(--accent); }
     .page-btn.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
@@ -112,7 +71,6 @@
         .clientes-grid { grid-template-columns: 1fr; }
     }
 
-    /* Color avatars */
     .avatar-blue   { background: linear-gradient(135deg, #4f8ef7, #7c5cbf); }
     .avatar-green  { background: linear-gradient(135deg, #22c55e, #16a34a); }
     .avatar-orange { background: linear-gradient(135deg, #f59e0b, #ef4444); }
@@ -124,7 +82,6 @@
 
 @section('content')
 
-{{-- ── STATS ────────────────────────────────────────────── --}}
 <div class="client-stats">
     <div class="cs-card">
         <div class="cs-icon blue"><i class="fas fa-users"></i></div>
@@ -149,7 +106,6 @@
     </div>
 </div>
 
-{{-- ── FILTROS ──────────────────────────────────────────── --}}
 <div class="filtros">
     <span style="font-size: 12px; color: var(--text-3); font-weight: 600;">FILTRAR:</span>
     <a href="{{ route('cobrador.clientes.index', array_merge(request()->except('filtro'), [])) }}"
@@ -162,7 +118,6 @@
     </a>
 </div>
 
-{{-- ── GRID DE CLIENTES ─────────────────────────────────── --}}
 @if($clientes->count() > 0)
 <div class="clientes-grid">
     @php
@@ -236,7 +191,6 @@
     @endforeach
 </div>
 
-{{-- Paginación --}}
 @if($clientes->hasPages())
 <div class="pagination-wrap">
     @if($clientes->onFirstPage())

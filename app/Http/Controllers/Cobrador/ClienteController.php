@@ -36,10 +36,14 @@ class ClienteController extends Controller
         // Estadísticas
         $totalClientes  = $cobrador->clientes()->activos()->count();
         $clientesEnMora = $cobrador->clientes()->enMora()->count();
-        $saldoTotal     = Cliente::delCobrador($cobrador->id)
+
+        // Fix: qualify cobrador_id to avoid ambiguity with the join
+        $saldoTotal = Cliente::query()
+            ->where('clientes.cobrador_id', $cobrador->id)
             ->join('creditos', 'clientes.id', '=', 'creditos.cliente_id')
             ->whereIn('creditos.estado', ['activo', 'mora', 'al_dia'])
-            ->sum('creditos.saldo_pendiente');
+            ->selectRaw('COALESCE(SUM(creditos.saldo_pendiente), 0) as total')
+            ->value('total') ?? 0;
 
         return view('cobrador.clientes.index', compact(
             'clientes', 'totalClientes', 'clientesEnMora', 'saldoTotal'
