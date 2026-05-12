@@ -1,4 +1,5 @@
-composer.json
-composer.lock
-package.json
-railpack.json
+[phases.setup]
+nixPkgs = ["php84", "php84Packages.composer", "nodejs"]
+
+[start]
+cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
