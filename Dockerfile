@@ -1,20 +1,15 @@
-FROM php:8.4-cli
-
-RUN apt-get update && apt-get install -y \
-    git unzip curl zip libzip-dev nodejs npm \
-    && docker-php-ext-install pdo pdo_mysql zip
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+FROM webdevops/php-nginx:8.3
 
 WORKDIR /app
 
-COPY . .
+COPY . /app
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN npm install
-RUN npm run build
+RUN npm install && npm run build
+
+ENV WEB_DOCUMENT_ROOT=/app/public
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "php artisan migrate --force && php -S 0.0.0.0:${PORT:-8080} -t public"]
+CMD php artisan migrate --force && /opt/docker/bin/service.d/nginx.sh
