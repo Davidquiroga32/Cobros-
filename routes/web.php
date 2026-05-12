@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\ClienteController as AdminClienteController;
-use App\Http\Controllers\Admin\CreditoController as AdminCreditoController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\CobradorEstadoController;
+use App\Http\Controllers\admin\ClienteController as AdminClienteController;
+use App\Http\Controllers\admin\CreditoController as AdminCreditoController;
+use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\admin\UserController as AdminUserController;
+use App\Http\Controllers\admin\CobradorEstadoController;
 use App\Http\Controllers\Cobrador\AgendaController;
 use App\Http\Controllers\Cobrador\ClienteController;
 use App\Http\Controllers\Cobrador\DashboardController;
