@@ -20,7 +20,7 @@ Route::post(
 
 Route::get('/', fn () => redirect()->route('login'));
 
-// ─── COBRADOR ─────────────────────────────────────────────────────────────────
+
 Route::prefix('cobrador')
     ->name('cobrador.')
     ->middleware(['auth', 'role:cobrador,admin'])
