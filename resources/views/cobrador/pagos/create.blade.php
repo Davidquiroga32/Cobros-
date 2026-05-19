@@ -185,9 +185,9 @@
                             <span class="monto-prefix">$</span>
                             <input type="number" name="monto_pagado" id="montoInput"
                                 class="monto-input {{ $errors->has('monto_pagado') ? '' : '' }}"
-                                value="{{ old('monto_pagado', $cuota->saldo_cuota) }}"
-                                min="0.01" max="{{ $cuota->saldo_cuota }}"
-                                step="1000" required
+                                value="{{ old('monto_pagado', (int) $cuota->saldo_cuota) }}"
+                                min="500" max="{{ (int) $cuota->saldo_cuota }}"
+                                step="500" required
                                 placeholder="0">
                         </div>
                         @error('monto_pagado')

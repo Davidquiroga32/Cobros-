@@ -85,7 +85,11 @@ class UserController extends Controller
     {
         $sectores = Sector::activos()->orderBy('nombre')->get();
         $usuario->load(['clientes', 'sector']);
-        return view('admin.usuarios.edit', compact('usuario', 'sectores'));
+        $creditos = \App\Models\Credito::with(['cliente', 'cuotas'])
+            ->where('cobrador_id', $usuario->id)
+            ->latest()
+            ->get();
+        return view('admin.usuarios.edit', compact('usuario', 'sectores', 'creditos'));
     }
 
     public function update(Request $request, User $usuario)
@@ -126,5 +130,16 @@ class UserController extends Controller
         $usuario->update(['active' => !$usuario->active]);
         $estado = $usuario->active ? 'activado' : 'desactivado';
         return back()->with('success', "Usuario {$estado} correctamente.");
+    }
+
+    public function cancelarCredito(\App\Models\Credito $credito, Request $request)
+    {
+        if (! in_array($credito->estado, ['activo', 'al_dia', 'mora'])) {
+            return back()->with('error', "El credito {$credito->codigo} ya esta {$credito->estado}.");
+        }
+
+        $credito->update(['estado' => 'cancelado']);
+
+        return back()->with('success', "Credito {$credito->codigo} cancelado correctamente.");
     }
 }

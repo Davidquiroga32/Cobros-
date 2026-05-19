@@ -104,6 +104,9 @@
                 <div class="u-meta">
                     <span><i class="fas fa-envelope" style="font-size: 10px;"></i> {{ $usuario->email }}</span>
                     @if($usuario->phone) <span><i class="fas fa-phone" style="font-size: 10px;"></i> {{ $usuario->phone }}</span> @endif
+                    @if($usuario->role === 'cobrador')
+                    <span><i class="fas fa-map-location-dot" style="font-size: 10px;"></i> {{ $usuario->sector?->nombre ?? 'Sin asignar' }}</span>
+                    @endif
                     <span><i class="fas fa-users" style="font-size: 10px;"></i> {{ $usuario->clientes_count }} clientes</span>
                 </div>
             </div>
@@ -112,6 +115,12 @@
                     <i class="fas fa-{{ $esAdmin ? 'shield-halved' : 'hand-holding-dollar' }}"></i>
                     {{ $esAdmin ? 'Admin' : 'Cobrador' }}
                 </span>
+                @if(!$esAdmin)
+                <span class="tag" style="font-size: 10px; margin-top: 4px; background: var(--bg-card-2); color: {{ $usuario->sector ? 'var(--text-2)' : 'var(--text-3)' }};">
+                    <i class="fas fa-map-pin" style="font-size: 9px;"></i>
+                    {{ $usuario->sector?->nombre ?? 'Sin asignar' }}
+                </span>
+                @endif
             </div>
             <div class="u-stats">
                 <div class="u-cobrado">${{ number_format($usuario->pagos_sum_monto_pagado ?? 0, 0, ',', '.') }}</div>

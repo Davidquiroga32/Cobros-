@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#4f8ef7">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SmartPay">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SmartPay — @yield('title', 'Dashboard')</title>
 
@@ -316,5 +324,11 @@
 </script>
 
 @stack('scripts')
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+}
+</script>
 </body>
 </html>

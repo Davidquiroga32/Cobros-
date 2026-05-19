@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartPay — Manual de Usuario v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sp-green: #00C875;
+  --sp-green-dark: #009959;
+  --sp-green-light: #E6FAF3;
+  --sp-blue: #1A73E8;
+  --sp-navy: #0D1B2A;
+  --sp-navy2: #1A2E42;
+  --sp-gray: #64748B;
+  --sp-light: #F8FAFC;
+  --sp-border: #E2E8F0;
+  --sp-amber: #F59E0B;
+  --sp-red: #EF4444;
+  --sp-purple: #8B5CF6;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F0F4F8; color: var(--sp-navy); font-size: 15px; line-height: 1.6; }
+a { color: var(--sp-blue); text-decoration: none; }
+
+/* LAYOUT */
+.wrapper { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px; min-height: 100vh; background: var(--sp-navy);
+  position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto;
+  display: flex; flex-direction: column; z-index: 100;
+}
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.logo-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 20px; font-weight: 800; color: #fff;
+}
+.logo-icon {
+  width: 34px; height: 34px; background: var(--sp-green);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.logo-version { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 4px; font-weight: 500; }
+
+.nav-section { padding: 16px 12px 0; }
+.nav-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.3); padding: 0 12px; margin-bottom: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: 8px; color: rgba(255,255,255,.65); font-size: 13.5px; font-weight: 500;
+  cursor: pointer; transition: all .15s; margin-bottom: 2px; text-decoration: none;
+}
+.nav-item:hover { background: rgba(255,255,255,.07); color: #fff; }
+.nav-item.active { background: rgba(0,200,117,.15); color: var(--sp-green); }
+.nav-icon { width: 18px; text-align: center; font-size: 15px; }
+.nav-sub { padding-left: 16px; }
+.nav-sub .nav-item { font-size: 12.5px; padding: 7px 12px; }
+
+/* MAIN */
+.main { margin-left: 260px; padding: 0; flex: 1; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--sp-navy) 0%, var(--sp-navy2) 100%);
+  padding: 60px 56px 52px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 340px; height: 340px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,200,117,.18) 0%, transparent 70%);
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -80px; left: 200px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(26,115,232,.12) 0%, transparent 70%);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,200,117,.15); border: 1px solid rgba(0,200,117,.3);
+  color: var(--sp-green); font-size: 12px; font-weight: 600; padding: 5px 12px;
+  border-radius: 100px; margin-bottom: 20px;
+}
+.hero h1 { font-size: 40px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 12px; }
+.hero h1 span { color: var(--sp-green); }
+.hero p { font-size: 16px; color: rgba(255,255,255,.6); max-width: 560px; margin-bottom: 32px; }
+.hero-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.8); font-size: 12.5px; font-weight: 500;
+  padding: 6px 14px; border-radius: 100px;
+}
+
+/* CONTENT */
+.content { padding: 40px 56px; }
+
+/* SECTION */
+.section { margin-bottom: 52px; scroll-margin-top: 80px; }
+.section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+.section-num {
+  width: 40px; height: 40px; background: var(--sp-green); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.section-header h2 { font-size: 22px; font-weight: 800; color: var(--sp-navy); }
+.section-header p { font-size: 13.5px; color: var(--sp-gray); margin-top: 2px; }
+
+/* CARDS */
+.card {
+  background: #fff; border: 1px solid var(--sp-border); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden;
+}
+.card-grid { display: grid; gap: 16px; }
+.card-grid-2 { grid-template-columns: 1fr 1fr; }
+.card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+/* FEATURE CARD */
+.feat-card { padding: 22px; }
+.feat-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  margin-bottom: 14px;
+}
+.feat-icon.green { background: var(--sp-green-light); }
+.feat-icon.blue  { background: #EFF6FF; }
+.feat-icon.amber { background: #FFFBEB; }
+.feat-icon.red   { background: #FEF2F2; }
+.feat-icon.purple{ background: #F5F3FF; }
+.feat-title { font-size: 15px; font-weight: 700; color: var(--sp-navy); margin-bottom: 6px; }
+.feat-desc { font-size: 13px; color: var(--sp-gray); line-height: 1.55; }
+
+/* STEP CARD */
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step {
+  display: flex; gap: 18px; padding: 20px 24px;
+  border-bottom: 1px solid var(--sp-border); position: relative;
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--sp-navy);
+  color: #fff; font-weight: 700; font-size: 13px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+.step-body h4 { font-size: 14px; font-weight: 700; color: var(--sp-navy); margin-bottom: 4px; }
+.step-body p  { font-size: 13px; color: var(--sp-gray); line-height: 1.5; }
+.step-body code {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  background: var(--sp-light); border: 1px solid var(--sp-border);
+  padding: 2px 7px; border-radius: 5px; color: var(--sp-navy);
+}
+
+/* SCREEN MOCKUP */
+.mockup {
+  background: var(--sp-navy); border-radius: 14px; padding: 0; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.18);
+}
+.mockup-bar {
+  background: var(--sp-navy2); padding: 10px 16px; display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.r { background: #FF5F57; }
+.dot.y { background: #FFBD2E; }
+.dot.g { background: #28CA42; }
+.mockup-url {
+  flex: 1; background: rgba(255,255,255,.06); border-radius: 6px;
+  padding: 5px 12px; font-size: 11px; font-family: 'JetBrains Mono', monospace;
+  color: rgba(255,255,255,.45); margin: 0 12px;
+}
+.mockup-body { padding: 20px; }
+
+/* DASHBOARD PREVIEW */
+.dash-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+.kpi {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px; padding: 14px; text-align: center;
+}
+.kpi-val { font-size: 22px; font-weight: 800; color: #fff; }
+.kpi-lbl { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 3px; }
+.kpi.green .kpi-val { color: var(--sp-green); }
+.kpi.amber .kpi-val { color: var(--sp-amber); }
+.kpi.red   .kpi-val { color: #FF6B6B; }
+
+.cobrador-row {
+  background: rgba(255,255,255,.04); border-radius: 8px; padding: 10px 14px;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.cobrador-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--sp-green); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.cobrador-name { font-size: 13px; font-weight: 600; color: #fff; }
+.cobrador-cn   { font-size: 11px; color: rgba(255,255,255,.4); font-family: 'JetBrains Mono', monospace; }
+.cobrador-meta { margin-left: auto; text-align: right; }
+.cobrador-monto { font-size: 13px; font-weight: 700; color: var(--sp-green); }
+.cobrador-prog { font-size: 11px; color: rgba(255,255,255,.4); }
+.progress-bar {
+  height: 4px; background: rgba(255,255,255,.1); border-radius: 2px;
+  flex: 1; overflow: hidden; min-width: 80px;
+}
+.progress-fill { height: 100%; background: var(--sp-green); border-radius: 2px; }
+
+/* STATUS BADGE */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 100px;
+}
+.badge-green { background: rgba(0,200,117,.15); color: var(--sp-green); }
+.badge-amber { background: rgba(245,158,11,.12); color: var(--sp-amber); }
+.badge-red   { background: rgba(239,68,68,.12); color: var(--sp-red); }
+.badge-blue  { background: rgba(26,115,232,.1);  color: var(--sp-blue); }
+.badge-gray  { background: #F1F5F9; color: var(--sp-gray); }
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; }
+.badge-dot.green { background: var(--sp-green); }
+.badge-dot.amber { background: var(--sp-amber); }
+.badge-dot.red   { background: var(--sp-red); }
+
+/* ROLE CARDS */
+.role-card {
+  border: 2px solid var(--sp-border); border-radius: var(--radius);
+  padding: 28px; position: relative; overflow: hidden;
+}
+.role-card.admin { border-color: rgba(0,200,117,.3); background: linear-gradient(135deg, var(--sp-green-light) 0%, #fff 60%); }
+.role-card.cobrador { border-color: rgba(26,115,232,.3); background: linear-gradient(135deg, #EFF6FF 0%, #fff 60%); }
+.role-icon { font-size: 36px; margin-bottom: 14px; }
+.role-title { font-size: 18px; font-weight: 800; color: var(--sp-navy); margin-bottom: 6px; }
+.role-route {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  background: rgba(0,0,0,.06); padding: 4px 10px; border-radius: 6px;
+  display: inline-block; margin-bottom: 14px; color: var(--sp-gray);
+}
+.role-list { list-style: none; }
+.role-list li { font-size: 13px; color: var(--sp-gray); padding: 4px 0; display: flex; gap: 8px; }
+.role-list li::before { content: '✓'; color: var(--sp-green); font-weight: 700; }
+
+/* TABLE */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  background: var(--sp-light); padding: 10px 16px; text-align: left;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--sp-gray); border-bottom: 2px solid var(--sp-border);
+}
+.data-table td { padding: 12px 16px; border-bottom: 1px solid var(--sp-border); color: var(--sp-navy); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--sp-light); }
+.td-mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--sp-gray); }
+
+/* API TABLE */
+.method {
+  display: inline-block; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; min-width: 48px; text-align: center;
+}
+.method-get  { background: #DCFCE7; color: #166534; }
+.method-post { background: #DBEAFE; color: #1E40AF; }
+.method-patch{ background: #FEF9C3; color: #92400E; }
+
+/* INFO BOX */
+.info-box {
+  display: flex; gap: 14px; padding: 16px 18px;
+  border-radius: 10px; margin-bottom: 16px;
+}
+.info-box.tip  { background: var(--sp-green-light); border: 1px solid rgba(0,200,117,.25); }
+.info-box.warn { background: #FFFBEB; border: 1px solid rgba(245,158,11,.3); }
+.info-box.info { background: #EFF6FF; border: 1px solid rgba(26,115,232,.2); }
+.info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.info-text { font-size: 13px; line-height: 1.55; }
+.info-text strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--sp-border); margin: 36px 0; }
+
+/* PWA Steps */
+.pwa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.pwa-card { background: #fff; border: 1px solid var(--sp-border); border-radius: var(--radius); overflow: hidden; }
+.pwa-header { padding: 16px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--sp-border); }
+.pwa-os-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.pwa-title { font-size: 15px; font-weight: 700; }
+.pwa-steps { padding: 16px 20px; }
+.pwa-step { display: flex; gap: 12px; padding: 8px 0; }
+.pwa-step-n {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--sp-navy);
+  color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+.pwa-step p { font-size: 13px; color: var(--sp-gray); line-height: 1.45; }
+
+/* CRED CARD */
+.cred-card { background: var(--sp-navy); color: #fff; border-radius: var(--radius); padding: 24px; }
+.cred-role { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--sp-green); margin-bottom: 12px; }
+.cred-field { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+.cred-field:last-child { border-bottom: none; }
+.cred-key { font-size: 12px; color: rgba(255,255,255,.45); }
+.cred-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #fff; font-weight: 600; }
+
+/* FOOTER */
+.footer { background: var(--sp-navy); color: rgba(255,255,255,.4); text-align: center; padding: 28px; font-size: 12.5px; margin-left: 0; }
+
+/* AGENDA MOCKUP */
+.agenda-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.03);
+  border-radius: 8px; margin-bottom: 6px;
+}
+.agenda-avatar {
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center; font-weight: 700;
+  font-size: 14px; color: #fff; flex-shrink: 0;
+}
+.agenda-name { font-size: 13px; font-weight: 600; color: #fff; }
+.agenda-detail { font-size: 11px; color: rgba(255,255,255,.4); }
+.agenda-amount { margin-left: auto; font-size: 14px; font-weight: 700; color: var(--sp-green); }
+.agenda-btn {
+  background: var(--sp-green); color: #fff; border: none; border-radius: 6px;
+  padding: 6px 14px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .content { padding: 24px 20px; }
+  .hero { padding: 36px 24px; }
+  .card-grid-2, .card-grid-3, .pwa-grid { grid-template-columns: 1fr; }
+  .dash-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-icon">💳</div>
+      SmartPay
+    </div>
+    <div class="logo-version">Manual de Usuario — v1.0</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Inicio</div>
+    <a href="#acceso" class="nav-item active"><span class="nav-icon">🔐</span> Acceso al sistema</a>
+    <a href="#roles" class="nav-item"><span class="nav-icon">👥</span> Roles</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Panel Administrador</div>
+    <a href="#dashboard-admin" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="#clientes" class="nav-item"><span class="nav-icon">👤</span> Clientes</a>
+    <a href="#creditos" class="nav-item"><span class="nav-icon">💰</span> Créditos</a>
+    <a href="#usuarios" class="nav-item"><span class="nav-icon">🧑‍💼</span> Usuarios / Cobradores</a>
+    <a href="#estado-op" class="nav-item"><span class="nav-icon">📡</span> Estado operativo</a>
+    <a href="#sectores" class="nav-item"><span class="nav-icon">🗺️</span> Sectores</a>
+    <a href="#cajas" class="nav-item"><span class="nav-icon">🏦</span> Cajas</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Panel Cobrador</div>
+    <a href="#dashboard-cobrador" class="nav-item"><span class="nav-icon">📱</span> Dashboard</a>
+    <a href="#agenda" class="nav-item"><span class="nav-icon">📅</span> Agenda de cobro</a>
+    <a href="#ruta" class="nav-item"><span class="nav-icon">🛣️</span> Mi ruta</a>
+    <a href="#caja-cobrador" class="nav-item"><span class="nav-icon">💼</span> Mi caja</a>
+    <a href="#pagos" class="nav-item"><span class="nav-icon">✅</span> Historial de pagos</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Técnico</div>
+    <a href="#pwa" class="nav-item"><span class="nav-icon">📲</span> Instalar en celular</a>
+    <a href="#api" class="nav-item"><span class="nav-icon">⚡</span> API REST</a>
+    <a href="#credenciales" class="nav-item"><span class="nav-icon">🔑</span> Credenciales de prueba</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📖 Manual de Usuario</div>
+  <h1>Sistema de Gestión<br><span>SmartPay</span></h1>
+  <p>Guía completa para administradores y cobradores. Gestión de cartera, créditos, rutas y cobranza desde cualquier dispositivo.</p>
+  <div class="hero-pills">
+    <span class="pill">🌐 Laravel 13</span>
+    <span class="pill">📱 PWA Instalable</span>
+    <span class="pill">⚡ API REST</span>
+    <span class="pill">🔄 Tiempo real</span>
+    <span class="pill">📍 Geolocalización</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ============================== ACCESO ============================== -->
+<section class="section" id="acceso">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <h2>Acceso al sistema</h2>
+      <p>Ingreso, autenticación y redirección por rol</p>
+    </div>
+  </div>
+
+  <div class="info-box info">
+    <span class="info-icon">🌐</span>
+    <div class="info-text">
+      <strong>URL de acceso</strong>
+      Ingresa a <code style="font-family:monospace;background:#dbeafe;padding:2px 8px;border-radius:4px;">http://TU-DOMINIO.com</code> desde cualquier navegador. El sistema te redirigirá automáticamente al login.
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:20px;">
+    <div class="card feat-card">
+      <div class="feat-icon green">🔐</div>
+      <div class="feat-title">Inicio de sesión</div>
+      <div class="feat-desc">Ingresa tu <strong>correo electrónico</strong> y <strong>contraseña</strong>. El sistema detecta tu rol automáticamente y te lleva al panel correcto.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon blue">🚪</div>
+      <div class="feat-title">Cierre de sesión</div>
+      <div class="feat-desc">Usa el botón <strong>"Cerrar sesión"</strong> en la parte inferior del menú lateral izquierdo. Siempre cierra sesión en dispositivos compartidos.</div>
+    </div>
+  </div>
+
+  <div class="info-box tip">
+    <span class="info-icon">💡</span>
+    <div class="info-text">
+      <strong>Redirección automática por rol</strong>
+      Administrador → <code style="font-family:monospace;">/admin</code> &nbsp;|&nbsp; Cobrador → <code style="font-family:monospace;">/cobrador</code>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ROLES ============================== -->
+<section class="section" id="roles">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <h2>Roles del sistema</h2>
+      <p>Perfiles de usuario y sus capacidades</p>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2">
+    <div class="role-card admin">
+      <div class="role-icon">🛡️</div>
+      <div class="role-title">Administrador</div>
+      <div class="role-route">/admin</div>
+      <ul class="role-list">
+        <li>Control total del sistema</li>
+        <li>Gestionar clientes, créditos y usuarios</li>
+        <li>Monitorear cobradores en tiempo real</li>
+        <li>Apertura/cierre masivo de cajas</li>
+        <li>Ver reportes y KPIs del negocio</li>
+        <li>Configurar sectores y rutas</li>
+      </ul>
+    </div>
+    <div class="role-card cobrador">
+      <div class="role-icon">🧑‍💼</div>
+      <div class="role-title">Cobrador</div>
+      <div class="role-route">/cobrador</div>
+      <ul class="role-list">
+        <li>Gestionar su cartera de clientes</li>
+        <li>Registrar pagos desde el celular</li>
+        <li>Ver y seguir su ruta del día</li>
+        <li>Crear créditos para sus clientes</li>
+        <li>Controlar su caja diaria</li>
+        <li>Consultar agenda y cuotas pendientes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== DASHBOARD ADMIN ============================== -->
+<section class="section" id="dashboard-admin">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <h2>Dashboard — Administrador</h2>
+      <p>Visión general del negocio en tiempo real</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="mockup">
+      <div class="mockup-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="mockup-url">smartpay.co/admin</span>
+      </div>
+      <div class="mockup-body">
+        <div style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;">KPIs del día</div>
+        <div class="dash-grid">
+          <div class="kpi green"><div class="kpi-val">$2.4M</div><div class="kpi-lbl">Cobrado hoy</div></div>
+          <div class="kpi"><div class="kpi-val">142</div><div class="kpi-lbl">Créditos activos</div></div>
+          <div class="kpi amber"><div class="kpi-val">18</div><div class="kpi-lbl">Clientes en mora</div></div>
+          <div class="kpi red"><div class="kpi-val">31</div><div class="kpi-lbl">Cuotas vencidas</div></div>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.35);margin:14px 0 10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;">Top cobradores hoy</div>
+        <div class="cobrador-row">
+          <div class="cobrador-avatar">MA</div>
+          <div><div class="cobrador-name">María Arbeláez</div><div class="cobrador-cn">CN-001 · Sector Centro</div></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:82%"></div></div>
+          <div class="cobrador-meta"><div class="cobrador-monto">$680K</div><div class="cobrador-prog">82% meta</div></div>
+          <span class="badge badge-green"><span class="badge-dot green"></span>En ruta</span>
+        </div>
+        <div class="cobrador-row">
+          <div class="cobrador-avatar" style="background:#1A73E8;">JR</div>
+          <div><div class="cobrador-name">Juan Rodríguez</div><div class="cobrador-cn">CN-002 · Sector Barzal</div></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:55%;background:#F59E0B;"></div></div>
+          <div class="cobrador-meta"><div class="cobrador-monto" style="color:#F59E0B;">$420K</div><div class="cobrador-prog">55% meta</div></div>
+          <span class="badge badge-amber"><span class="badge-dot amber"></span>Disponible</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card feat-card">
+      <div class="feat-icon green">📈</div>
+      <div class="feat-title">Gráfica de cobros</div>
+      <div class="feat-desc">Línea de tiempo de los últimos 30 días con totales cobrados por fecha.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon amber">⚠️</div>
+      <div class="feat-title">Top cuotas vencidas</div>
+      <div class="feat-desc">Las 8 cuotas más antiguas sin pagar para gestión prioritaria de mora.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon blue">🔄</div>
+      <div class="feat-title">Actualización en vivo</div>
+      <div class="feat-desc">Los datos del estado operativo vienen en tiempo real del middleware de actividad.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CLIENTES ============================== -->
+<section class="section" id="clientes">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <h2>Gestión de Clientes</h2>
+      <p>Creación, edición y seguimiento de cartera</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><h4>Listar y buscar</h4><p>Accede a <code>/admin/clientes</code>. Usa el buscador por <strong>nombre, cédula o teléfono</strong>. Filtra por cobrador asignado, estado (activo / inactivo / bloqueado) o solo clientes en mora.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><h4>Crear nuevo cliente</h4><p>Clic en <strong>"Nuevo cliente"</strong>. Completa: nombre, cédula, teléfono principal y alternativo, dirección, barrio, ciudad y referencia de ubicación. Asigna un cobrador desde el dropdown.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><h4>Ver ficha del cliente</h4><p>Clic en cualquier cliente para abrir su ficha completa con créditos activos, tabla de cuotas, historial de pagos (últimos 20) y botón para crear un nuevo crédito.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><h4>Editar o eliminar</h4><p>Desde la ficha: botón <strong>"Editar"</strong> para cambiar datos, cobrador asignado o estado. El botón <strong>"Eliminar"</strong> aplica <em>borrado lógico</em> — los datos permanecen en la base de datos.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warn">
+    <span class="info-icon">⚠️</span>
+    <div class="info-text">
+      <strong>Borrado lógico (SoftDelete)</strong>
+      Al eliminar un cliente, este se oculta de las listas pero sus datos e historial permanecen en la base de datos por integridad financiera.
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CREDITOS ============================== -->
+<section class="section" id="creditos">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <h2>Gestión de Créditos</h2>
+      <p>Creación, seguimiento y administración de créditos</p>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body"><h4>Crear crédito</h4><p>Selecciona cliente y cobrador. Define <strong>monto prestado, tasa de interés (%), número de cuotas y frecuencia</strong> (diaria / semanal / quincenal / mensual).</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body"><h4>Generación automática de cuotas</h4><p>Al guardar, el sistema genera <strong>todas las cuotas</strong> con fechas de vencimiento calculadas según la frecuencia elegida.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body"><h4>Panel de resumen en vivo</h4><p>Mientras escribes, el panel lateral muestra en tiempo real: <strong>total a pagar</strong> y <strong>valor por cuota</strong>.</p></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px;padding:20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--sp-navy);">Estados de un crédito</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:var(--sp-gray);">Al día</span><span class="badge badge-green">✓ Al día</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:var(--sp-gray);">Con cuotas vencidas</span><span class="badge badge-amber">⚠ En mora</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:var(--sp-gray);">Saldo $0</span><span class="badge badge-blue">✓ Pagado</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:var(--sp-gray);">Anulado</span><span class="badge badge-gray">Cancelado</span></div>
+        </div>
+      </div>
+      <div class="info-box warn" style="margin-bottom:0;">
+        <span class="info-icon">🚫</span>
+        <div class="info-text">
+          <strong>Restricciones de edición</strong>
+          No se puede cambiar el <strong>monto prestado</strong> ni el <strong>número de cuotas</strong>. Solo cliente, cobrador, tasa y estado. Un crédito solo se puede eliminar si NO tiene pagos registrados.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== USUARIOS ============================== -->
+<section class="section" id="usuarios">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <h2>Usuarios y Cobradores</h2>
+      <p>Administración de accesos y perfiles</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;overflow:auto;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Administrador</th>
+          <th>Cobrador</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Nombre y email</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Contraseña</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Código CN</td><td>—</td><td>✅ <span class="badge badge-blue">Único</span></td></tr>
+        <tr><td>Sector asignado</td><td>—</td><td>✅</td></tr>
+        <tr><td>Estadísticas de cobro</td><td>—</td><td>✅ (en edición)</td></tr>
+        <tr><td>Activar / Desactivar</td><td>✅</td><td>✅ (excepto a sí mismo)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box tip">
+    <span class="info-icon">💡</span>
+    <div class="info-text">
+      <strong>Sección dinámica al crear usuario</strong>
+      Al seleccionar el rol <strong>Cobrador</strong>, aparecen automáticamente los campos <em>Código CN</em> y <em>Sector</em>. Para Administrador, estos campos se ocultan.
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ESTADO OPERATIVO ============================== -->
+<section class="section" id="estado-op">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <h2>Estado Operativo</h2>
+      <p>Monitoreo en tiempo real de todos los cobradores activos</p>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:20px;">
+    <div class="card feat-card">
+      <div class="feat-icon green">📡</div>
+      <div class="feat-title">Actualización automática</div>
+      <div class="feat-desc">La página se refresca cada <strong>60 segundos</strong> con cuenta regresiva visible. También puedes actualizar manualmente.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon red">⏱️</div>
+      <div class="feat-title">Detección OFFLINE</div>
+      <div class="feat-desc">Un cobrador aparece como <strong>OFFLINE</strong> si su última actividad fue hace más de <strong>5 minutos</strong>.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon blue">🎯</div>
+      <div class="feat-title">Meta del día</div>
+      <div class="feat-desc">Barra de progreso con porcentaje, monto cobrado vs esperado, y paradas de ruta completadas.</div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid var(--sp-border);border-radius:var(--radius);padding:16px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--sp-gray);margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase;font-size:11px;">Filtros rápidos</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-gray" style="font-size:12px;padding:5px 14px;">Todos</span>
+      <span class="badge badge-green" style="font-size:12px;padding:5px 14px;">En ruta</span>
+      <span class="badge badge-blue" style="font-size:12px;padding:5px 14px;">Disponible</span>
+      <span class="badge badge-gray" style="font-size:12px;padding:5px 14px;opacity:.5;">Offline</span>
+      <span class="badge badge-amber" style="font-size:12px;padding:5px 14px;">Pausado</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SECTORES ============================== -->
+<section class="section" id="sectores">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <h2>Sectores</h2>
+      <p>Organización geográfica de los cobradores</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;overflow:auto;">
+    <table class="data-table">
+      <thead>
+        <tr><th>Código</th><th>Nombre</th><th>Ciudad</th><th>Cobradores</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="td-mono">SEC-01</td><td>Centro</td><td>Villavicencio</td><td>3</td><td><span class="badge badge-green">Activo</span></td></tr>
+        <tr><td class="td-mono">SEC-02</td><td>Barzal</td><td>Villavicencio</td><td>2</td><td><span class="badge badge-green">Activo</span></td></tr>
+        <tr><td class="td-mono">SEC-03</td><td>La 40</td><td>Villavicencio</td><td>1</td><td><span class="badge badge-green">Activo</span></td></tr>
+        <tr><td class="td-mono">SEC-04</td><td>Macarena</td><td>Villavicencio</td><td>0</td><td><span class="badge badge-gray">Inactivo</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box info">
+    <span class="info-icon">ℹ️</span>
+    <div class="info-text">El <strong>código de sector</strong> (SEC-01, SEC-02…) se genera automáticamente y no se puede modificar. Solo se puede eliminar un sector si no tiene cobradores asignados.</div>
+  </div>
+</section>
+
+<!-- ============================== CAJAS ============================== -->
+<section class="section" id="cajas">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <div>
+      <h2>Gestión de Cajas</h2>
+      <p>Control del flujo de efectivo diario por cobrador</p>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" style="background:var(--sp-green);">A</div>
+          <div class="step-body"><h4>Abrir caja individual</h4><p>Botón "Abrir caja" → seleccionar cobrador → ingresar <strong>monto inicial</strong> y notas opcionales. El sistema hereda el sector automáticamente.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--sp-green);">B</div>
+          <div class="step-body"><h4>Apertura masiva por sector</h4><p>Botón <strong>"Abrir por sector"</strong> → seleccionar sector + monto inicial único. Abre caja para <em>todos</em> los cobradores activos que no tengan caja abierta hoy.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#EF4444;">C</div>
+          <div class="step-body"><h4>Cerrar caja</h4><p>Desde el detalle o la lista. Ingresa los <strong>gastos del día</strong> (combustible, almuerzo, etc.). El sistema calcula el monto final: <code>inicial + cobrado − gastos</code>.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#EF4444;">D</div>
+          <div class="step-body"><h4>Cierre masivo por sector</h4><p>Botón <strong>"Cerrar por sector"</strong> → seleccionar sector. Cierra todas las cajas abiertas del sector en un solo paso.</p></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="padding:20px;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px;">Estados de caja</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:var(--sp-gray);">Operando hoy</span><span class="badge badge-green">🟢 Abierta</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:var(--sp-gray);">Finalizada sin cuadre</span><span class="badge badge-amber">🟡 Cerrada</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:var(--sp-gray);">Verificada por admin</span><span class="badge badge-blue">✓ Cuadrada</span></div>
+        </div>
+      </div>
+      <div class="info-box warn">
+        <span class="info-icon">🚫</span>
+        <div class="info-text"><strong>Validación importante</strong><br>No se permite abrir dos cajas el mismo día para el mismo cobrador.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================== DASHBOARD COBRADOR ============================== -->
+<section class="section" id="dashboard-cobrador">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-blue);">10</div>
+    <div>
+      <h2>Panel Cobrador — Dashboard</h2>
+      <p>Panel personal con métricas y progreso diario</p>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:20px;">
+    <div class="card feat-card">
+      <div class="feat-icon green">💵</div>
+      <div class="feat-title">Cobrado hoy</div>
+      <div class="feat-desc">Total recaudado en el día. Incluye gráfica de barras de los últimos 7 días para visualizar tendencias.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon blue">🎯</div>
+      <div class="feat-title">Meta diaria</div>
+      <div class="feat-desc">Anillo de progreso con porcentaje y monto cobrado vs meta asignada. Visitas completadas y pendientes del día.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon amber">⚠️</div>
+      <div class="feat-title">Clientes en mora</div>
+      <div class="feat-desc">Lista de clientes con saldo pendiente y días de atraso. Próximos cobros de los siguientes 3 días.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== AGENDA ============================== -->
+<section class="section" id="agenda">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-blue);">11</div>
+    <div>
+      <h2>Agenda de Cobro</h2>
+      <p>Planificador diario de cobranza por fecha</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="mockup">
+      <div class="mockup-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="mockup-url">smartpay.co/cobrador/agenda</span>
+      </div>
+      <div class="mockup-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="color:rgba(255,255,255,.4);font-size:14px;">‹</span>
+          <span style="color:#fff;font-weight:700;font-size:14px;background:var(--sp-green);padding:5px 18px;border-radius:20px;">Hoy — 19 mayo</span>
+          <span style="color:rgba(255,255,255,.4);font-size:14px;">›</span>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:14px;">
+          <div class="kpi" style="flex:1;padding:10px;"><div class="kpi-val" style="font-size:16px;color:var(--sp-green);">$840K</div><div class="kpi-lbl">Esperado</div></div>
+          <div class="kpi" style="flex:1;padding:10px;"><div class="kpi-val" style="font-size:16px;">$510K</div><div class="kpi-lbl">Cobrado</div></div>
+          <div class="kpi" style="flex:1;padding:10px;"><div class="kpi-val" style="font-size:16px;color:#FF6B6B;">$120K</div><div class="kpi-lbl">En atraso</div></div>
+        </div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:8px;">Pendientes del día</div>
+        <div class="agenda-item">
+          <div class="agenda-avatar">CL</div>
+          <div><div class="agenda-name">Carmen López</div><div class="agenda-detail">Cuota 5/12 · Barzal Alto</div></div>
+          <div class="agenda-amount">$85.000</div>
+          <button class="agenda-btn">Cobrar</button>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-avatar" style="background:#8B5CF6;">PR</div>
+          <div><div class="agenda-name">Pedro Ramírez</div><div class="agenda-detail">Cuota 2/8 · Centro</div></div>
+          <div class="agenda-amount">$120.000</div>
+          <button class="agenda-btn">Cobrar</button>
+        </div>
+        <div class="agenda-item" style="opacity:.5;">
+          <div class="agenda-avatar" style="background:rgba(255,255,255,.1);">LM</div>
+          <div><div class="agenda-name">Lucía Moreno</div><div class="agenda-detail">Cuota 9/12 · La 40</div></div>
+          <div class="agenda-amount" style="color:#fff;">$95.000</div>
+          <span class="badge badge-green" style="font-size:11px;">✓ Pagado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card feat-card">
+      <div class="feat-icon amber">📆</div>
+      <div class="feat-title">Cuotas atrasadas</div>
+      <div class="feat-desc">Toggle desplegable (colapsado por defecto) que muestra cuotas vencidas de días anteriores con días de atraso.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon green">📋</div>
+      <div class="feat-title">Pendientes del día</div>
+      <div class="feat-desc">Cuotas programadas para la fecha seleccionada que aún no se han cobrado. Botón "Cobrar" en cada una.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon blue">✅</div>
+      <div class="feat-title">Cobrados hoy</div>
+      <div class="feat-desc">Cuotas ya pagadas aparecen atenuadas al final de la lista como registro del día.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PAGOS ============================== -->
+<section class="section" id="pagos">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-blue);">12</div>
+    <div>
+      <h2>Registro de Pagos</h2>
+      <p>Cómo registrar un cobro y tipos de pago</p>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body"><h4>Acceder al formulario</h4><p>Haz clic en <strong>"Cobrar"</strong> desde la Agenda o desde la ficha de un crédito.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body"><h4>Ingresar monto</h4><p>El monto no puede ser mayor al saldo de la cuota. Puedes registrar un <strong>pago parcial</strong> si el cliente paga menos del total.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body"><h4>Seleccionar método</h4><p>Efectivo · Transferencia · Nequi · Daviplata · Otro. Agrega observaciones si es necesario.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body"><h4>Confirmar pago</h4><p>El sistema actualiza automáticamente el saldo de la cuota, el crédito y la próxima fecha de pago.</p></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="padding:20px;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px;">Lógica de pagos</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:var(--sp-green-light);border:1px solid rgba(0,200,117,.2);border-radius:8px;padding:12px;">
+            <div style="font-size:12px;font-weight:700;color:var(--sp-green-dark);margin-bottom:4px;">Pago total</div>
+            <div style="font-size:12px;color:var(--sp-gray);">Cubre el saldo completo → cuota marcada como <strong>Pagada</strong>. Si el crédito queda en $0, se marca <strong>Pagado</strong>.</div>
+          </div>
+          <div style="background:#FFFBEB;border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:12px;">
+            <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:4px;">Pago parcial</div>
+            <div style="font-size:12px;color:var(--sp-gray);">Monto menor al saldo → cuota queda en estado <strong>Parcial</strong> con saldo restante actualizado.</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-box tip">
+        <span class="info-icon">📍</span>
+        <div class="info-text"><strong>Geolocalización opcional</strong><br>Puedes adjuntar la ubicación GPS del pago para auditoría y control de visitas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RUTA ============================== -->
+<section class="section" id="ruta">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-blue);">13</div>
+    <div>
+      <h2>Mi Ruta</h2>
+      <p>Plan de visitas diario generado automáticamente</p>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:20px;">
+    <div class="card feat-card">
+      <div class="feat-icon green">⚡</div>
+      <div class="feat-title">Generación automática</div>
+      <div class="feat-desc">Al entrar, el sistema genera la ruta del día tomando las cuotas con vencimiento hoy, ordenadas por fecha.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon purple">↕️</div>
+      <div class="feat-title">Reordenar (drag & drop)</div>
+      <div class="feat-desc">Si el orden sugerido no es óptimo, arrastra las paradas para reorganizarlas. El nuevo orden se guarda en el servidor.</div>
+    </div>
+    <div class="card feat-card">
+      <div class="feat-icon amber">📝</div>
+      <div class="feat-title">Acciones por parada</div>
+      <div class="feat-desc">Marcar visitado · No encontrado · Reagendar para otro día · Campo de observaciones.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CAJA COBRADOR ============================== -->
+<section class="section" id="caja-cobrador">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-blue);">14</div>
+    <div>
+      <h2>Mi Caja</h2>
+      <p>Control de caja diaria personal del cobrador</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="background:var(--sp-green);">A</div>
+        <div class="step-body"><h4>Apertura de caja</h4><p>Botón <strong>"Abrir caja"</strong> (visible solo si no hay caja abierta hoy). Ingresa el <strong>monto inicial</strong> que llevas para operar y notas opcionales.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#EF4444;">C</div>
+        <div class="step-body"><h4>Cierre de caja</h4><p>Botón <strong>"Cerrar caja"</strong>. Ingresa los <strong>gastos del día</strong> (combustible, almuerzo, etc.). El sistema calcula el monto final automáticamente desde los pagos registrados.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">H</div>
+        <div class="step-body"><h4>Historial de cajas</h4><p>Consulta las últimas <strong>30 cajas</strong> con sector, fecha, montos y estado para seguimiento de tu historial.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================== PWA ============================== -->
+<section class="section" id="pwa">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-purple);">15</div>
+    <div>
+      <h2>Instalar SmartPay en el celular</h2>
+      <p>Aplicación web progresiva (PWA) para Android e iOS</p>
+    </div>
+  </div>
+
+  <div class="info-box info" style="margin-bottom:20px;">
+    <span class="info-icon">📱</span>
+    <div class="info-text"><strong>¿Qué es la PWA?</strong> SmartPay funciona como una app instalable en tu celular. Una vez instalada, se abre en pantalla completa sin barra del navegador, como cualquier app nativa.</div>
+  </div>
+
+  <div class="pwa-grid" style="margin-bottom:20px;">
+    <div class="pwa-card">
+      <div class="pwa-header">
+        <div class="pwa-os-icon" style="background:#E8F5E9;">🤖</div>
+        <div class="pwa-title">Android (Chrome)</div>
+      </div>
+      <div class="pwa-steps">
+        <div class="pwa-step"><div class="pwa-step-n">1</div><p>Abre el sistema en <strong>Chrome</strong> e inicia sesión normalmente.</p></div>
+        <div class="pwa-step"><div class="pwa-step-n">2</div><p>Toca el icono de <strong>3 puntos</strong> del navegador.</p></div>
+        <div class="pwa-step"><div class="pwa-step-n">3</div><p>Selecciona <strong>"Agregar a pantalla principal"</strong> o <strong>"Instalar aplicación"</strong>.</p></div>
+        <div class="pwa-step"><div class="pwa-step-n">4</div><p>Confirma la instalación. SmartPay aparecerá en tu pantalla de inicio.</p></div>
+      </div>
+    </div>
+    <div class="pwa-card">
+      <div class="pwa-header">
+        <div class="pwa-os-icon" style="background:#F5F5F5;">🍎</div>
+        <div class="pwa-title">iOS (Safari)</div>
+      </div>
+      <div class="pwa-steps">
+        <div class="pwa-step"><div class="pwa-step-n">1</div><p>Abre el sistema en <strong>Safari</strong> (no en Chrome ni Firefox).</p></div>
+        <div class="pwa-step"><div class="pwa-step-n">2</div><p>Toca el icono <strong>Compartir</strong> (cuadrado con flecha hacia arriba).</p></div>
+        <div class="pwa-step"><div class="pwa-step-n">3</div><p>Desplázate y toca <strong>"Agregar a la pantalla de inicio"</strong>.</p></div>
+        <div class="pwa-step"><div class="pwa-step-n">4</div><p>Ponle nombre <strong>SmartPay</strong> y toca <strong>"Agregar"</strong>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warn">
+    <span class="info-icon">⚠️</span>
+    <div class="info-text"><strong>Funcionamiento sin conexión</strong> Las páginas visitadas se almacenan en caché. Las operaciones que guardan datos (pagos, créditos) requieren conexión a internet activa.</div>
+  </div>
+</section>
+
+<!-- ============================== API ============================== -->
+<section class="section" id="api">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-purple);">16</div>
+    <div>
+      <h2>API REST</h2>
+      <p>Endpoints para integración con app móvil nativa</p>
+    </div>
+  </div>
+
+  <div class="info-box info" style="margin-bottom:20px;">
+    <span class="info-icon">🔐</span>
+    <div class="info-text"><strong>Autenticación con Laravel Sanctum</strong> Todas las peticiones (excepto login) requieren el header: <code style="font-family:monospace;background:#dbeafe;padding:2px 8px;border-radius:4px;">Authorization: Bearer &lt;token&gt;</code></div>
+  </div>
+
+  <div class="card" style="overflow:auto;">
+    <table class="data-table">
+      <thead>
+        <tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="method method-post">POST</span></td><td class="td-mono">/api/login</td><td>Obtener token de acceso</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td class="td-mono">/api/logout</td><td>Cerrar sesión e invalidar token</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td class="td-mono">/api/me</td><td>Datos del usuario autenticado</td></tr>
+        <tr><td colspan="3" style="background:var(--sp-light);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--sp-gray);">Clientes</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td class="td-mono">/api/clientes</td><td>Listar clientes del cobrador</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td class="td-mono">/api/clientes/{id}</td><td>Detalle de un cliente</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td class="td-mono">/api/clientes</td><td>Crear nuevo cliente</td></tr>
+        <tr><td colspan="3" style="background:var(--sp-light);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--sp-gray);">Cuotas y pagos</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td class="td-mono">/api/cuotas/hoy</td><td>Cuotas pendientes del día</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td class="td-mono">/api/cuotas/atrasadas</td><td>Cuotas vencidas sin pagar</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td class="td-mono">/api/pagos/hoy</td><td>Pagos registrados hoy</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td class="td-mono">/api/pagos</td><td>Registrar nuevo pago</td></tr>
+        <tr><td colspan="3" style="background:var(--sp-light);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--sp-gray);">Caja</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td class="td-mono">/api/caja/actual</td><td>Caja abierta del día</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td class="td-mono">/api/caja/abrir</td><td>Abrir caja del día</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td class="td-mono">/api/caja/cerrar</td><td>Cerrar caja con gastos</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td class="td-mono">/api/estado/sync</td><td>Sincronizar estado del cobrador</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================== CREDENCIALES ============================== -->
+<section class="section" id="credenciales">
+  <div class="section-header">
+    <div class="section-num" style="background:var(--sp-purple);">17</div>
+    <div>
+      <h2>Credenciales de prueba</h2>
+      <p>Usuarios y datos precargados para testing</p>
+    </div>
+  </div>
+
+  <div class="info-box info" style="margin-bottom:20px;">
+    <span class="info-icon">⚡</span>
+    <div class="info-text"><strong>Para activar los datos de prueba ejecuta:</strong><br><code style="font-family:monospace;font-size:13px;">php artisan migrate:fresh --seed</code></div>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:20px;">
+    <div class="cred-card">
+      <div class="cred-role">🛡️ Administrador</div>
+      <div class="cred-field"><span class="cred-key">Email</span><span class="cred-val">admin@smartpay.co</span></div>
+      <div class="cred-field"><span class="cred-key">Contraseña</span><span class="cred-val">password</span></div>
+      <div class="cred-field"><span class="cred-key">Panel</span><span class="cred-val">/admin</span></div>
+    </div>
+    <div class="cred-card" style="background:var(--sp-navy2);">
+      <div class="cred-role" style="color:var(--sp-blue);">🧑‍💼 Cobrador</div>
+      <div class="cred-field"><span class="cred-key">Email</span><span class="cred-val">cobrador@smartpay.co</span></div>
+      <div class="cred-field"><span class="cred-key">Contraseña</span><span class="cred-val">password</span></div>
+      <div class="cred-field"><span class="cred-key">Panel</span><span class="cred-val">/cobrador</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:20px;">
+    <div style="font-size:13px;font-weight:700;margin-bottom:12px;">Datos precargados por el seeder</div>
+    <div class="card-grid card-grid-3">
+      <div style="text-align:center;padding:12px;background:var(--sp-light);border-radius:8px;"><div style="font-size:22px;font-weight:800;color:var(--sp-navy);">4</div><div style="font-size:12px;color:var(--sp-gray);">Sectores</div></div>
+      <div style="text-align:center;padding:12px;background:var(--sp-light);border-radius:8px;"><div style="font-size:22px;font-weight:800;color:var(--sp-navy);">6</div><div style="font-size:12px;color:var(--sp-gray);">Clientes con créditos</div></div>
+      <div style="text-align:center;padding:12px;background:var(--sp-light);border-radius:8px;"><div style="font-size:22px;font-weight:800;color:var(--sp-green);">✓</div><div style="font-size:12px;color:var(--sp-gray);">Pagos de ejemplo</div></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /content -->
+
+<div class="footer">
+  SmartPay v1.0 &nbsp;·&nbsp; Sistema de Gestión de Cobranza, Créditos y Rutas &nbsp;·&nbsp; Laravel 13<br>
+  Manual de Usuario — Generado para uso interno
+</div>
+
+</main>
+</div>
+
+<script>
+// Active nav highlight on scroll
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  navItems.forEach(n => {
+    n.classList.remove('active');
+    if (n.getAttribute('href') === '#' + current) n.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -101,6 +101,7 @@ Route::prefix('admin')
         Route::get('/creditos/{credito}/editar', [AdminCreditoController::class, 'edit'])->name('creditos.edit');
         Route::put('/creditos/{credito}',        [AdminCreditoController::class, 'update'])->name('creditos.update');
         Route::delete('/creditos/{credito}',     [AdminCreditoController::class, 'destroy'])->name('creditos.destroy');
+        Route::patch('/creditos/{credito}/cancelar', [AdminUserController::class, 'cancelarCredito'])->name('creditos.cancelar');
 
         // AJAX: clientes por cobrador
         Route::get('/api/cobrador/{cobrador}/clientes', [AdminCreditoController::class, 'clientesPorCobrador'])

@@ -153,7 +153,7 @@
         <div style="position: sticky; top: 80px;">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><i class="fas fa-chart-bar"></i> Estadísticas</div>
+                    <div class="card-title"><i class="fas fa-chart-bar"></i> Estadisticas</div>
                 </div>
                 <div class="card-body">
                     <div style="text-align: center; margin-bottom: 16px;">
@@ -165,6 +165,16 @@
                         </div>
                         <div style="font-size: 15px; font-weight: 700; color: var(--text-1);">{{ $usuario->name }}</div>
                         <div style="font-size: 12px; color: var(--text-2); margin-top: 2px;">{{ $usuario->email }}</div>
+                        @if($usuario->role === 'cobrador')
+                        <div style="margin-top: 6px;">
+                            <span class="tag" style="font-size: 10px; background: var(--bg-card-2); color: {{ $usuario->sector ? 'var(--text-2)' : 'var(--text-3)' }};">
+                                <i class="fas fa-map-pin"></i> {{ $usuario->sector?->nombre ?? 'Sin asignar' }}
+                            </span>
+                            @if($usuario->cn)
+                            <span class="tag info" style="font-size: 10px;">{{ $usuario->cn }}</span>
+                            @endif
+                        </div>
+                        @endif
                     </div>
 
                     @php
@@ -199,6 +209,75 @@
         </div>
 
     </div>
+</div>
+
+@if($usuario->role === 'cobrador' && $creditos->count() > 0)
+<div style="max-width: 700px; margin-top: 16px;">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"><i class="fas fa-file-invoice-dollar"></i> Creditos de {{ $usuario->name }}</div>
+            <span class="tag info">{{ $creditos->count() }} creditos</span>
+        </div>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Cliente</th>
+                        <th>Monto</th>
+                        <th>Saldo</th>
+                        <th>Cuotas</th>
+                        <th>Estado</th>
+                        <th style="text-align:center;">Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($creditos as $credito)
+                    <tr>
+                        <td style="font-family: var(--font-mono); font-size: 12px;">{{ $credito->codigo }}</td>
+                        <td>
+                            <a href="{{ route('admin.clientes.show', $credito->cliente) }}" style="color: var(--accent); text-decoration: none; font-weight: 600;">
+                                {{ $credito->cliente->nombre }}
+                            </a>
+                        </td>
+                        <td style="font-family: var(--font-mono);">${{ number_format($credito->monto_prestado, 0, ',', '.') }}</td>
+                        <td style="font-family: var(--font-mono); color: {{ $credito->saldo_pendiente > 0 ? 'var(--danger)' : 'var(--success)' }}; font-weight: 700;">
+                            ${{ number_format($credito->saldo_pendiente, 0, ',', '.') }}
+                        </td>
+                        <td>{{ $credito->cuotasPagadas() }}/{{ $credito->num_cuotas }}</td>
+                        <td>
+                            <span class="tag {{ match($credito->estado) { 'activo','al_dia' => 'info', 'mora' => 'danger', 'pagado' => 'success', 'cancelado' => '', default => '' } }}"
+                                style="{{ $credito->estado === 'cancelado' ? 'background:var(--bg-card-2); color:var(--text-3);' : '' }}">
+                                {{ match($credito->estado) {
+                                    'activo' => 'Activo', 'al_dia' => 'Al dia', 'mora' => 'Mora',
+                                    'pagado' => 'Pagado', 'cancelado' => 'Cancelado',
+                                    default => $credito->estado
+                                } }}
+                            </span>
+                        </td>
+                        <td style="text-align:center;">
+                            <a href="{{ route('admin.creditos.show', $credito) }}" class="btn btn-secondary btn-sm" title="Ver detalle">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            @if(in_array($credito->estado, ['activo', 'al_dia', 'mora']))
+                            <form action="{{ route('admin.creditos.cancelar', $credito) }}" method="POST" style="display:inline;"
+                                onsubmit="return confirm('Cancelar el credito {{ $credito->codigo }}? El saldo pendiente quedara registrado.')">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="btn btn-sm" style="background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(239,68,68,0.3);" title="Cancelar credito">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </form>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
+
 </div>
 
 @push('scripts')
