@@ -256,6 +256,11 @@
             <i class="fas fa-users"></i> Clientes
         </a>
 
+        <a href="{{ route('cobrador.creditos.index') }}"
+            class="nav-item {{ request()->routeIs('cobrador.creditos.*') ? 'active' : '' }}">
+            <i class="fas fa-file-invoice-dollar"></i> Mis creditos
+        </a>
+
         <a href="{{ route('cobrador.pagos.index') }}"
             class="nav-item {{ request()->routeIs('cobrador.pagos.*') ? 'active' : '' }}">
             <i class="fas fa-receipt"></i> Historial de pagos

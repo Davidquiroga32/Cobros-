@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\CobradorEstadoApiController;
 use App\Http\Controllers\Cobrador\AgendaController;
 use App\Http\Controllers\Cobrador\CajaController as CobradorCajaController;
 use App\Http\Controllers\Cobrador\ClienteController;
+use App\Http\Controllers\Cobrador\CreditoController as CobradorCreditoController;
 use App\Http\Controllers\Cobrador\DashboardController;
 use App\Http\Controllers\Cobrador\PagoController;
 use App\Http\Controllers\Cobrador\RutaController;
@@ -43,10 +44,18 @@ Route::prefix('cobrador')
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         // Clientes
-        Route::get('/clientes',           [ClienteController::class, 'index'])->name('clientes.index');
-        Route::get('/clientes/crear',     [ClienteController::class, 'create'])->name('clientes.create');
-        Route::post('/clientes',          [ClienteController::class, 'store'])->name('clientes.store');
-        Route::get('/clientes/{cliente}', [ClienteController::class, 'show'])->name('clientes.show');
+        Route::get('/clientes',                  [ClienteController::class, 'index'])->name('clientes.index');
+        Route::get('/clientes/crear',            [ClienteController::class, 'create'])->name('clientes.create');
+        Route::post('/clientes',                 [ClienteController::class, 'store'])->name('clientes.store');
+        Route::get('/clientes/{cliente}',        [ClienteController::class, 'show'])->name('clientes.show');
+        Route::get('/clientes/{cliente}/editar', [ClienteController::class, 'edit'])->name('clientes.edit');
+        Route::put('/clientes/{cliente}',        [ClienteController::class, 'update'])->name('clientes.update');
+
+        // Creditos (cobrador puede crear creditos para sus clientes)
+        Route::get('/creditos',              [CobradorCreditoController::class, 'index'])->name('creditos.index');
+        Route::get('/creditos/crear',        [CobradorCreditoController::class, 'create'])->name('creditos.create');
+        Route::post('/creditos',             [CobradorCreditoController::class, 'store'])->name('creditos.store');
+        Route::get('/creditos/{credito}',    [CobradorCreditoController::class, 'show'])->name('creditos.show');
 
         // Agenda
         Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda');
@@ -85,11 +94,13 @@ Route::prefix('admin')
         Route::delete('/clientes/{cliente}',     [AdminClienteController::class, 'destroy'])->name('clientes.destroy');
 
         // ── Créditos ─────────────────────────────────────────────────────────
-        Route::get('/creditos',              [AdminCreditoController::class, 'index'])->name('creditos.index');
-        Route::get('/creditos/crear',        [AdminCreditoController::class, 'create'])->name('creditos.create');
-        Route::post('/creditos',             [AdminCreditoController::class, 'store'])->name('creditos.store');
-        Route::get('/creditos/{credito}',    [AdminCreditoController::class, 'show'])->name('creditos.show');
-        Route::delete('/creditos/{credito}', [AdminCreditoController::class, 'destroy'])->name('creditos.destroy');
+        Route::get('/creditos',                  [AdminCreditoController::class, 'index'])->name('creditos.index');
+        Route::get('/creditos/crear',            [AdminCreditoController::class, 'create'])->name('creditos.create');
+        Route::post('/creditos',                 [AdminCreditoController::class, 'store'])->name('creditos.store');
+        Route::get('/creditos/{credito}',        [AdminCreditoController::class, 'show'])->name('creditos.show');
+        Route::get('/creditos/{credito}/editar', [AdminCreditoController::class, 'edit'])->name('creditos.edit');
+        Route::put('/creditos/{credito}',        [AdminCreditoController::class, 'update'])->name('creditos.update');
+        Route::delete('/creditos/{credito}',     [AdminCreditoController::class, 'destroy'])->name('creditos.destroy');
 
         // AJAX: clientes por cobrador
         Route::get('/api/cobrador/{cobrador}/clientes', [AdminCreditoController::class, 'clientesPorCobrador'])

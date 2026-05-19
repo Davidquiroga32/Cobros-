@@ -4,7 +4,10 @@
 
 @section('topbar-actions')
     <a href="{{ route('admin.creditos.index') }}" class="btn btn-secondary btn-sm">
-        <i class="fas fa-arrow-left"></i> Créditos
+        <i class="fas fa-arrow-left"></i> Creditos
+    </a>
+    <a href="{{ route('admin.creditos.edit', $credito) }}" class="btn btn-secondary btn-sm">
+        <i class="fas fa-pen"></i> Editar
     </a>
     @if(in_array($credito->estado, ['activo','al_dia','mora']))
     <form action="{{ route('admin.creditos.destroy', $credito) }}" method="POST"

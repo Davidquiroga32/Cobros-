@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Cliente;
 use App\Models\Credito;
-use App\Models\Cuota;
 use App\Models\Pago;
+use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +15,13 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // ── Usuarios ──────────────────────────────────────────────────────────
+        $this->call(CobradorEstadoSeeder::class);
+
+        $centro   = Sector::firstOrCreate(['codigo' => 'SEC-01'], ['nombre' => 'Centro', 'ciudad' => 'Villavicencio', 'descripcion' => 'Sector centro de la ciudad', 'activo' => true]);
+        $barzal   = Sector::firstOrCreate(['codigo' => 'SEC-02'], ['nombre' => 'Barzal', 'ciudad' => 'Villavicencio', 'descripcion' => 'Barrio Barzal y alrededores', 'activo' => true]);
+        $la40     = Sector::firstOrCreate(['codigo' => 'SEC-03'], ['nombre' => 'La 40', 'ciudad' => 'Villavicencio', 'descripcion' => 'Sector de la avenida 40', 'activo' => true]);
+        $macarena = Sector::firstOrCreate(['codigo' => 'SEC-04'], ['nombre' => 'Macarena', 'ciudad' => 'Villavicencio', 'descripcion' => 'Barrio Macarena y popular', 'activo' => true]);
+
         $admin = User::factory()->create([
             'name'     => 'Carlos Administrador',
             'email'    => 'admin@smartpay.co',
@@ -25,24 +31,24 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $cobrador = User::factory()->create([
-            'name'     => 'Ana Martínez',
-            'email'    => 'cobrador@smartpay.co',
-            'password' => Hash::make('password'),
-            'role'     => 'cobrador',
-            'phone'    => '3009876543',
+            'name'      => 'Ana Martinez',
+            'email'     => 'cobrador@smartpay.co',
+            'password'  => Hash::make('password'),
+            'role'      => 'cobrador',
+            'phone'     => '3009876543',
+            'cn'        => 'CN-001',
+            'sector_id' => $barzal->id,
         ]);
 
-        // ── Datos de clientes ─────────────────────────────────────────────────
         $clientesData = [
-            ['nombre' => 'Inversiones López',  'cedula' => '10123456', 'telefono' => '3101234567', 'direccion' => 'Cra 5 #23-10, Barrio Centro', 'barrio' => 'Centro'],
+            ['nombre' => 'Inversiones Lopez',  'cedula' => '10123456', 'telefono' => '3101234567', 'direccion' => 'Cra 5 #23-10, Barrio Centro', 'barrio' => 'Centro'],
             ['nombre' => 'Marcos Pedraza',     'cedula' => '10234567', 'telefono' => '3112345678', 'direccion' => 'Cll 8 #15-20, Barrio La 40', 'barrio' => 'La 40'],
             ['nombre' => 'Tienda La 40',       'cedula' => '10345678', 'telefono' => '3123456789', 'direccion' => 'Av. 40 #10-5',               'barrio' => 'La 40'],
-            ['nombre' => 'Julia Méndez',       'cedula' => '10456789', 'telefono' => '3134567890', 'direccion' => 'Cra 3 #45-12, Barzal',       'barrio' => 'Barzal'],
-            ['nombre' => 'Ferretería El Gato', 'cedula' => '10567890', 'telefono' => '3145678901', 'direccion' => 'Cll 30 #7-8',                'barrio' => 'Macarena'],
+            ['nombre' => 'Julia Mendez',       'cedula' => '10456789', 'telefono' => '3134567890', 'direccion' => 'Cra 3 #45-12, Barzal',       'barrio' => 'Barzal'],
+            ['nombre' => 'Ferreteria El Gato', 'cedula' => '10567890', 'telefono' => '3145678901', 'direccion' => 'Cll 30 #7-8',                'barrio' => 'Macarena'],
             ['nombre' => 'Rosa Morales',       'cedula' => '10678901', 'telefono' => '3156789012', 'direccion' => 'Cra 9 #12-5, Popular',       'barrio' => 'Popular'],
         ];
 
-        // ── Contador de código incremental (sin depender del modelo) ──────────
         $codigoContador = 1;
 
         foreach ($clientesData as $data) {
@@ -52,15 +58,13 @@ class DatabaseSeeder extends Seeder
                 'estado'      => 'activo',
             ]));
 
-            // Parámetros del crédito
-            $montoPrestado = rand(3, 20) * 100000;          // 300k – 2M en múltiplos de 100k
+            $montoPrestado = rand(3, 20) * 100000;
             $numCuotas     = rand(10, 24);
             $tasaInteres   = 5;
             $totalPagar    = $montoPrestado * (1 + $tasaInteres / 100);
-            $valorCuota    = round($totalPagar / $numCuotas / 1000) * 1000; // redondear a miles
+            $valorCuota    = round($totalPagar / $numCuotas / 1000) * 1000;
             $fechaInicio   = Carbon::now()->subDays(rand(5, 30))->startOfDay();
 
-            // Código único generado aquí, sin llamar al modelo (evita la condición de carrera)
             $codigo = 'CRD' . str_pad($codigoContador++, 5, '0', STR_PAD_LEFT);
 
             $credito = Credito::create([
@@ -83,7 +87,6 @@ class DatabaseSeeder extends Seeder
 
             $credito->generarCuotas();
 
-            // Pagar algunas cuotas pasadas (0 a 3)
             $cuotasPagadas = rand(0, 3);
 
             if ($cuotasPagadas > 0) {
@@ -121,7 +124,6 @@ class DatabaseSeeder extends Seeder
                     $montoAcumuladoPagado += $cuota->valor_cuota;
                 }
 
-                // Actualizar saldo del crédito de una sola vez
                 $credito->decrement('saldo_pendiente', $montoAcumuladoPagado);
             }
         }

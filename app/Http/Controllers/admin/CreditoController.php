@@ -128,6 +128,58 @@ class CreditoController extends Controller
         return view('admin.creditos.show', compact('credito'));
     }
 
+    public function edit(Credito $credito)
+    {
+        $credito->load(['cliente', 'cobrador']);
+        $cobradores = User::where('role', 'cobrador')->where('active', true)->orderBy('name')->get();
+        $clientes = Cliente::where('cobrador_id', $credito->cobrador_id)
+            ->where('estado', 'activo')
+            ->orderBy('nombre')
+            ->get();
+
+        return view('admin.creditos.edit', compact('credito', 'cobradores', 'clientes'));
+    }
+
+    public function update(Request $request, Credito $credito)
+    {
+        $validated = $request->validate([
+            'cliente_id'     => ['required', 'exists:clientes,id'],
+            'cobrador_id'    => ['required', 'exists:users,id'],
+            'tasa_interes'   => ['required', 'numeric', 'min:0', 'max:100'],
+            'estado'         => ['required', 'in:activo,al_dia,mora,pagado,cancelado'],
+            'notas'          => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        // Recalcular totales si cambia la tasa
+        if ((float) $validated['tasa_interes'] != $credito->tasa_interes) {
+            $totalPagar = $credito->monto_prestado * (1 + $validated['tasa_interes'] / 100);
+            $valorCuota = round($totalPagar / $credito->num_cuotas);
+            $ajusteSaldo = $totalPagar - $credito->total_a_pagar;
+
+            $credito->update([
+                'tasa_interes'    => $validated['tasa_interes'],
+                'valor_cuota'     => $valorCuota,
+                'total_a_pagar'   => $totalPagar,
+                'saldo_pendiente' => max(0, $credito->saldo_pendiente + $ajusteSaldo),
+                'cliente_id'      => $validated['cliente_id'],
+                'cobrador_id'     => $validated['cobrador_id'],
+                'estado'          => $validated['estado'],
+                'notas'           => $validated['notas'] ?? null,
+            ]);
+        } else {
+            $credito->update([
+                'cliente_id'  => $validated['cliente_id'],
+                'cobrador_id' => $validated['cobrador_id'],
+                'tasa_interes' => $validated['tasa_interes'],
+                'estado'      => $validated['estado'],
+                'notas'       => $validated['notas'] ?? null,
+            ]);
+        }
+
+        return redirect()->route('admin.creditos.show', $credito)
+            ->with('success', '✅ Crédito actualizado correctamente.');
+    }
+
     public function destroy(Credito $credito)
     {
         if ($credito->pagos()->exists()) {

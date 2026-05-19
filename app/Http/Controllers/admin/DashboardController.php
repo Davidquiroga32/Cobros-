@@ -9,7 +9,6 @@ use App\Models\Cuota;
 use App\Models\Pago;
 use App\Models\User;
 use App\Services\CobradorEstadoService;
-use App\Models\CobradorEstado;
 
 class DashboardController extends Controller
 {
@@ -32,24 +31,29 @@ class DashboardController extends Controller
         $cobradores = User::where('role', 'cobrador')
             ->where('active', true)
             ->withCount(['clientes as total_clientes'])
+            ->withCount(['clientes as en_mora' => fn ($q) => $q->whereHas('creditos', fn ($sq) => $sq->where('estado', 'mora'))])
             ->with(['pagos' => fn ($q) => $q->whereDate('fecha_pago', today())])
             ->orderBy('name')
             ->take(10)
             ->get()
             ->map(function ($c) {
-                $c->cobrado_hoy   = $c->pagos->sum('monto_pagado');
-                $c->pagos_hoy     = $c->pagos->count();
-                $c->en_mora       = $c->clientes()->whereHas('creditos', fn ($q) => $q->where('estado', 'mora'))->count();
+                $c->cobrado_hoy = $c->pagos->sum('monto_pagado');
+                $c->pagos_hoy   = $c->pagos->count();
                 return $c;
             });
 
-        // Cobros últimos 30 días
+        // Cobros ultimos 30 dias (1 sola query)
+        $cobros30raw = Pago::selectRaw('DATE(fecha_pago) as fecha, SUM(monto_pagado) as total')
+            ->whereBetween('fecha_pago', [now()->subDays(29)->startOfDay(), now()->endOfDay()])
+            ->groupBy('fecha')
+            ->pluck('total', 'fecha');
+
         $cobros30 = collect();
         for ($i = 29; $i >= 0; $i--) {
             $fecha = now()->subDays($i);
             $cobros30->push([
                 'fecha' => $fecha->format('d/m'),
-                'total' => Pago::whereDate('fecha_pago', $fecha)->sum('monto_pagado'),
+                'total' => (float) ($cobros30raw[$fecha->format('Y-m-d')] ?? 0),
             ]);
         }
 

@@ -105,4 +105,38 @@ class ClienteController extends Controller
         return redirect()->route('cobrador.clientes.show', $cliente)
             ->with('success', "✅ Cliente '{$cliente->nombre}' registrado exitosamente.");
     }
+
+    public function edit(Cliente $cliente)
+    {
+        abort_if($cliente->cobrador_id !== Auth::id(), 403);
+
+        return view('cobrador.clientes.edit', compact('cliente'));
+    }
+
+    public function update(Request $request, Cliente $cliente)
+    {
+        abort_if($cliente->cobrador_id !== Auth::id(), 403);
+
+        $validated = $request->validate([
+            'nombre'               => ['required', 'string', 'max:255'],
+            'cedula'               => ['nullable', 'string', 'max:20', "unique:clientes,cedula,{$cliente->id}"],
+            'telefono'             => ['required', 'string', 'max:20'],
+            'telefono_alt'         => ['nullable', 'string', 'max:20'],
+            'direccion'            => ['required', 'string', 'max:500'],
+            'barrio'               => ['nullable', 'string', 'max:100'],
+            'ciudad'               => ['nullable', 'string', 'max:100'],
+            'referencia_ubicacion' => ['nullable', 'string', 'max:500'],
+            'notas'                => ['nullable', 'string', 'max:1000'],
+        ], [
+            'nombre.required'    => 'El nombre es obligatorio.',
+            'telefono.required'  => 'El teléfono es obligatorio.',
+            'direccion.required' => 'La dirección es obligatoria.',
+            'cedula.unique'      => 'Ya existe un cliente con esa cédula.',
+        ]);
+
+        $cliente->update($validated);
+
+        return redirect()->route('cobrador.clientes.show', $cliente)
+            ->with('success', "✅ Cliente actualizado.");
+    }
 }

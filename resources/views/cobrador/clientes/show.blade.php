@@ -6,6 +6,9 @@
     <a href="{{ route('cobrador.clientes.index') }}" class="btn btn-secondary btn-sm">
         <i class="fas fa-arrow-left"></i> Volver
     </a>
+    <a href="{{ route('cobrador.clientes.edit', $cliente) }}" class="btn btn-secondary btn-sm">
+        <i class="fas fa-pen"></i> Editar
+    </a>
     @if($creditoActivo)
     <a href="{{ route('cobrador.pagos.create', $creditoActivo->cuotas()->whereIn('estado',['pendiente','parcial','vencida'])->orderBy('fecha_vencimiento')->first() ?? $creditoActivo->cuotas->first()) }}"
        class="btn btn-primary btn-sm">

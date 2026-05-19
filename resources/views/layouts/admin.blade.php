@@ -250,6 +250,9 @@
         <a href="{{ route('cobrador.dashboard') }}" class="nav-item">
             <i class="fas fa-arrow-right-arrow-left"></i> Vista cobrador
         </a>
+        <a href="{{ route('admin.cobradores.estado') }}" class="nav-item {{ request()->routeIs('admin.cobradores.estado') ? 'active' : '' }}">
+            <i class="fas fa-satellite-dish"></i> Estado operativo
+        </a>
         <a href="{{ route('admin.sectores.index') }}" class="nav-item {{ request()->routeIs('admin.sectores.*') ? 'active' : '' }}">
             <i class="fas fa-map"></i> Sectores
         </a>
