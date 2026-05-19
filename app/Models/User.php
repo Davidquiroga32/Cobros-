@@ -6,38 +6,37 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'phone', 'active'])]
+#[Fillable(['name', 'email', 'password', 'role', 'phone', 'active', 'cn', 'sector_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'active' => 'boolean',
+            'password'          => 'hashed',
+            'active'            => 'boolean',
         ];
     }
 
-    // Roles
-    public function isAdmin(): bool
+    // ── Roles ─────────────────────────────────────────────────
+    public function isAdmin(): bool    { return $this->role === 'admin'; }
+    public function isCobrador(): bool { return $this->role === 'cobrador'; }
+
+    // ── Relaciones ────────────────────────────────────────────
+    public function sector(): BelongsTo
     {
-        return $this->role === 'admin';
+        return $this->belongsTo(Sector::class, 'sector_id');
     }
 
-    public function isCobrador(): bool
-    {
-        return $this->role === 'cobrador';
-    }
-
-    // Relaciones
     public function clientes(): HasMany
     {
         return $this->hasMany(Cliente::class, 'cobrador_id');
@@ -53,7 +52,22 @@ class User extends Authenticatable
         return $this->hasMany(Pago::class, 'cobrador_id');
     }
 
-    // Estadísticas del cobrador
+    public function cajas(): HasMany
+    {
+        return $this->hasMany(Caja::class, 'cobrador_id');
+    }
+
+    public function rutas(): HasMany
+    {
+        return $this->hasMany(Ruta::class, 'cobrador_id');
+    }
+
+    public function estadoOperativo(): HasOne
+    {
+        return $this->hasOne(CobradorEstado::class, 'cobrador_id');
+    }
+
+    // ── Estadísticas ──────────────────────────────────────────
     public function totalCobradoHoy(): float
     {
         return $this->pagos()
@@ -64,15 +78,31 @@ class User extends Authenticatable
     public function clientesPendientesHoy(): int
     {
         return $this->clientes()
-            ->whereHas('cuotas', function ($q) {
+            ->whereHas('cuotas', fn ($q) =>
                 $q->whereDate('fecha_vencimiento', today())
-                    ->where('estado', 'pendiente');
-            })
+                  ->where('estado', 'pendiente')
+            )
             ->count();
     }
 
-    public function estadoOperativo()
+    /**
+     * Caja activa del día (abierta).
+     */
+    public function cajaHoy(): ?Caja
     {
-        return $this->hasOne(CobradorEstado::class, 'cobrador_id');
+        return $this->cajas()
+            ->whereDate('fecha_jornada', today())
+            ->where('estado', 'abierta')
+            ->first();
+    }
+
+    /**
+     * Ruta activa del día.
+     */
+    public function rutaHoy(): ?Ruta
+    {
+        return $this->rutas()
+            ->whereDate('fecha', today())
+            ->first();
     }
 }

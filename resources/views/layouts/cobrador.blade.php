@@ -252,13 +252,19 @@
         <div class="nav-section-label">Gestión</div>
 
         <a href="{{ route('cobrador.clientes.index') }}"
-           class="nav-item {{ request()->routeIs('cobrador.clientes.*') ? 'active' : '' }}">
+            class="nav-item {{ request()->routeIs('cobrador.clientes.*') ? 'active' : '' }}">
             <i class="fas fa-users"></i> Clientes
         </a>
 
         <a href="{{ route('cobrador.pagos.index') }}"
-           class="nav-item {{ request()->routeIs('cobrador.pagos.*') ? 'active' : '' }}">
+            class="nav-item {{ request()->routeIs('cobrador.pagos.*') ? 'active' : '' }}">
             <i class="fas fa-receipt"></i> Historial de pagos
+        </a>
+        <a href="{{ route('cobrador.ruta.index') }}" class="nav-item {{ request()->routeIs('cobrador.ruta.*') ? 'active' : '' }}">
+            <i class="fas fa-route"></i> Mi ruta
+        </a>
+        <a href="{{ route('cobrador.caja.index') }}" class="nav-item {{ request()->routeIs('cobrador.caja.*') ? 'active' : '' }}">
+            <i class="fas fa-cash-register"></i> Mi caja
         </a>
     </nav>
 
