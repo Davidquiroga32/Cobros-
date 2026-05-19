@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Pago;
 use App\Models\Cuota;
 use App\Models\Ruta;
+use App\Models\CobradorEstado;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
@@ -93,13 +94,18 @@ class CobradorEstadoService
                 'telefono'          => $cobrador->phone ?? '—',
                 'total_clientes'    => (int) ($clienteData->total ?? 0),
 
-                'estado_operativo'  => $estadoOp->estado ?? 'offline',
-                'conectado'         => (bool) ($estadoOp->conectado ?? false),
+                'estado_operativo'  => $this->calcularEstado($estadoOp),
+                'conectado'         => $this->estaConectado($estadoOp),
                 'ultima_sync'       => $estadoOp?->ultima_sincronizacion
                     ? $estadoOp->ultima_sincronizacion->diffForHumans()
                     : '—',
-                'ubicacion'         => $estadoOp->ubicacion_actual ?? null,
-                'version_app'       => $estadoOp->version_app ?? null,
+                'ubicacion'         => $estadoOp?->ubicacion_actual ?? null,
+                'version_app'       => $estadoOp?->version_app ?? null,
+                'score'             => (int) ($estadoOp?->score ?? 0),
+                'caja_actual'       => $estadoOp?->caja_actual ?? null,
+                'fecha_caja'        => $estadoOp?->fecha_caja?->format('d/m/Y'),
+                'caja_final'        => (float) ($estadoOp?->caja_final ?? 0),
+                'pin_dispositivo'   => $estadoOp?->pin_dispositivo ?? null,
 
                 'total_cobrado_hoy' => $totalCobradoHoy,
                 'total_pagos_hoy'   => $totalPagosHoy,
@@ -108,8 +114,38 @@ class CobradorEstadoService
                 'porcentaje_meta'   => $porcentajeMeta,
 
                 'progreso_ruta'     => $progresoRuta,
-                'caja_inicial'      => (float) ($estadoOp->caja_inicial ?? 0),
+                'caja_inicial'      => (float) ($estadoOp?->caja_inicial ?? 0),
             ];
         });
+    }
+
+    /**
+     * Calcula el estado real: si no hay registro o la ultima sincronizacion
+     * tiene mas de 5 minutos, se considera offline.
+     */
+    private function calcularEstado(?CobradorEstado $estado): string
+    {
+        if (! $estado) {
+            return 'offline';
+        }
+
+        if (! $this->estaConectado($estado)) {
+            return 'offline';
+        }
+
+        return $estado->estado ?? 'offline';
+    }
+
+    /**
+     * Un cobrador esta conectado si tiene registro y su ultima
+     * sincronizacion fue hace menos de 5 minutos.
+     */
+    private function estaConectado(?CobradorEstado $estado): bool
+    {
+        if (! $estado || ! $estado->ultima_sincronizacion) {
+            return false;
+        }
+
+        return $estado->ultima_sincronizacion->diffInMinutes(now()) < 5;
     }
 }

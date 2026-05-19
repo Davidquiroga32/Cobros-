@@ -97,6 +97,34 @@
                     @error('role')<div class="form-error" style="margin-top: 8px;"><i class="fas fa-triangle-exclamation"></i> {{ $message }}</div>@enderror
                 </div>
 
+                <div id="cobradorFields" style="margin-bottom: 22px; {{ old('role', 'cobrador') !== 'cobrador' ? 'display:none;' : '' }}">
+                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
+                        <i class="fas fa-route" style="margin-right: 6px; color: var(--accent);"></i> Datos de cobrador
+                    </div>
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Codigo CN</label>
+                            <input type="text" name="cn" class="form-control"
+                                value="{{ old('cn') }}" placeholder="Ej: CN-001">
+                            @error('cn')<div class="form-error"><i class="fas fa-triangle-exclamation"></i> {{ $message }}</div>@enderror
+                            <div class="form-hint">Codigo unico del cobrador en el sistema.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sector</label>
+                            <select name="sector_id" class="form-control">
+                                <option value="">Sin sector asignado</option>
+                                @foreach($sectores as $sector)
+                                <option value="{{ $sector->id }}" {{ old('sector_id') == $sector->id ? 'selected' : '' }}>
+                                    {{ $sector->nombre }} ({{ $sector->codigo }})
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('sector_id')<div class="form-error"><i class="fas fa-triangle-exclamation"></i> {{ $message }}</div>@enderror
+                            <div class="form-hint">Sector geografico donde opera el cobrador.</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border);">
                     <a href="{{ route('admin.usuarios.index') }}" class="btn btn-secondary">
                         <i class="fas fa-xmark"></i> Cancelar
@@ -112,12 +140,14 @@
 
 @push('scripts')
 <script>
-    // Highlight selected role
+    // Highlight selected role + toggle cobrador fields
+    const cobradorFields = document.getElementById('cobradorFields');
     document.querySelectorAll('input[name="role"]').forEach(radio => {
         const label = document.querySelector(`label[for="${radio.id}"]`);
         if (radio.checked) {
             label.style.borderColor = 'var(--accent)';
             label.style.background = 'var(--accent-glow)';
+            cobradorFields.style.display = radio.value === 'cobrador' ? '' : 'none';
         }
         radio.addEventListener('change', () => {
             document.querySelectorAll('input[name="role"]').forEach(r => {
@@ -127,6 +157,7 @@
             });
             label.style.borderColor = 'var(--accent)';
             label.style.background = 'var(--accent-glow)';
+            cobradorFields.style.display = radio.value === 'cobrador' ? '' : 'none';
         });
     });
 </script>

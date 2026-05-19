@@ -3,8 +3,14 @@
 @section('title', 'Cajas')
 
 @section('topbar-actions')
+    <button class="btn btn-secondary btn-sm" onclick="toggleModal('modalAbrirSector')">
+        <i class="fas fa-layer-group"></i> Abrir por sector
+    </button>
+    <button class="btn btn-secondary btn-sm" onclick="toggleModal('modalCerrarSector')">
+        <i class="fas fa-layer-group"></i> Cerrar por sector
+    </button>
     <a href="{{ route('admin.cajas.create') }}" class="btn btn-primary btn-sm">
-        <i class="fas fa-plus"></i> Abrir caja
+        <i class="fas fa-plus"></i> Abrir caja individual
     </a>
 @endsection
 
@@ -240,5 +246,80 @@
     @endif
 
 </div>
+
+{{-- MODAL: Abrir por sector --}}
+<div id="modalAbrirSector" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:500; align-items:center; justify-content:center;">
+    <div class="modal-box" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; width:calc(100% - 32px); max-width:480px;">
+        <div style="font-size:16px; font-weight:700; color:var(--text-1); margin-bottom:6px;">
+            <i class="fas fa-layer-group" style="color:var(--accent);"></i> Abrir cajas por sector
+        </div>
+        <p style="font-size:12px; color:var(--text-2); margin-bottom:20px;">
+            Abre una caja para TODOS los cobradores activos del sector seleccionado.
+        </p>
+        <form method="POST" action="{{ route('admin.cajas.abrirPorSector') }}">
+            @csrf
+            <div class="form-group">
+                <label class="form-label">Sector</label>
+                <select name="sector_id" class="form-control" required>
+                    <option value="">Selecciona un sector...</option>
+                    @foreach($sectores as $sector)
+                    <option value="{{ $sector->id }}">{{ $sector->nombre }} ({{ $sector->codigo }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Monto inicial ($)</label>
+                <input type="number" name="monto_inicial" class="form-control" value="0" min="0" required>
+                <div class="form-hint">Mismo monto inicial para todos los cobradores del sector.</div>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button type="button" class="btn btn-secondary" onclick="toggleModal('modalAbrirSector')">Cancelar</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Abrir cajas</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- MODAL: Cerrar por sector --}}
+<div id="modalCerrarSector" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:500; align-items:center; justify-content:center;">
+    <div class="modal-box" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; width:calc(100% - 32px); max-width:480px;">
+        <div style="font-size:16px; font-weight:700; color:var(--text-1); margin-bottom:6px;">
+            <i class="fas fa-layer-group" style="color:var(--danger);"></i> Cerrar cajas por sector
+        </div>
+        <p style="font-size:12px; color:var(--text-2); margin-bottom:20px;">
+            Cierra TODAS las cajas abiertas hoy de los cobradores del sector seleccionado.
+        </p>
+        <form method="POST" action="{{ route('admin.cajas.cerrarPorSector') }}">
+            @csrf
+            <div class="form-group">
+                <label class="form-label">Sector</label>
+                <select name="sector_id" class="form-control" required>
+                    <option value="">Selecciona un sector...</option>
+                    @foreach($sectores as $sector)
+                    <option value="{{ $sector->id }}">{{ $sector->nombre }} ({{ $sector->codigo }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button type="button" class="btn btn-secondary" onclick="toggleModal('modalCerrarSector')">Cancelar</button>
+                <button type="submit" class="btn btn-danger"><i class="fas fa-check"></i> Cerrar cajas</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    function toggleModal(id) {
+        const el = document.getElementById(id);
+        el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
+    }
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) overlay.style.display = 'none';
+        });
+    });
+</script>
+@endpush
 
 @endsection

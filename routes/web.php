@@ -132,6 +132,8 @@ Route::prefix('admin')
         Route::post('/cajas',                   [AdminCajaController::class, 'store'])->name('cajas.store');
         Route::get('/cajas/{caja}',             [AdminCajaController::class, 'show'])->name('cajas.show');
         Route::post('/cajas/{caja}/cerrar',     [AdminCajaController::class, 'cerrar'])->name('cajas.cerrar');
+        Route::post('/cajas/abrir-por-sector',  [AdminCajaController::class, 'abrirPorSector'])->name('cajas.abrirPorSector');
+        Route::post('/cajas/cerrar-por-sector', [AdminCajaController::class, 'cerrarPorSector'])->name('cajas.cerrarPorSector');
     });
 
 require __DIR__ . '/auth.php';

@@ -87,12 +87,12 @@
 
                     <div style="margin-bottom: 20px;">
                         <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
-                            <i class="fas fa-sliders" style="margin-right: 6px; color: var(--accent);"></i> Configuración
+                            <i class="fas fa-sliders" style="margin-right: 6px; color: var(--accent);"></i> Configuracion
                         </div>
                         <div class="form-grid form-grid-2">
                             <div class="form-group">
                                 <label class="form-label">Rol <span class="req">*</span></label>
-                                <select name="role" class="form-control" required>
+                                <select name="role" class="form-control" id="roleSelect" required>
                                     <option value="cobrador" {{ old('role', $usuario->role) === 'cobrador' ? 'selected' : '' }}>Cobrador</option>
                                     <option value="admin"    {{ old('role', $usuario->role) === 'admin' ? 'selected' : '' }}>Administrador</option>
                                 </select>
@@ -107,6 +107,32 @@
                                         Usuario activo
                                     </label>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cobradorFields" style="margin-bottom: 20px; {{ old('role', $usuario->role) !== 'cobrador' ? 'display:none;' : '' }}">
+                        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
+                            <i class="fas fa-route" style="margin-right: 6px; color: var(--accent);"></i> Datos de cobrador
+                        </div>
+                        <div class="form-grid form-grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Codigo CN</label>
+                                <input type="text" name="cn" class="form-control"
+                                    value="{{ old('cn', $usuario->cn) }}" placeholder="Ej: CN-001">
+                                @error('cn')<div class="form-error"><i class="fas fa-triangle-exclamation"></i> {{ $message }}</div>@enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Sector</label>
+                                <select name="sector_id" class="form-control">
+                                    <option value="">Sin sector asignado</option>
+                                    @foreach($sectores as $sector)
+                                    <option value="{{ $sector->id }}" {{ old('sector_id', $usuario->sector_id) == $sector->id ? 'selected' : '' }}>
+                                        {{ $sector->nombre }} ({{ $sector->codigo }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @error('sector_id')<div class="form-error"><i class="fas fa-triangle-exclamation"></i> {{ $message }}</div>@enderror
                             </div>
                         </div>
                     </div>
@@ -174,5 +200,15 @@
 
     </div>
 </div>
+
+@push('scripts')
+<script>
+    const roleSelect = document.getElementById('roleSelect');
+    const cobradorFields = document.getElementById('cobradorFields');
+    roleSelect.addEventListener('change', () => {
+        cobradorFields.style.display = roleSelect.value === 'cobrador' ? '' : 'none';
+    });
+</script>
+@endpush
 
 @endsection

@@ -258,9 +258,9 @@
                 <tbody id="estado-body">
                     @foreach($cobradoresEstado as $estado)
                     <tr>
-                        <td>{{ $estado->cobrador->name }}</td>
-                        <td><span class="badge-subtle">{{ $estado->cn }}</span></td>
-                        <td><i class="fas fa-location-dot" style="font-size:10px; color:var(--text-3);"></i> {{ $estado->ubicacion_actual ?? 'No disponible' }}</td>
+                        <td>{{ $estado['nombre'] }}</td>
+                        <td><span class="badge-subtle">{{ $estado['cn'] }}</span></td>
+                        <td><i class="fas fa-location-dot" style="font-size:10px; color:var(--text-3);"></i> {{ $estado['ubicacion'] ?? 'No disponible' }}</td>
                         <td>
                             @php
                                 $estadoColors = [
@@ -271,26 +271,26 @@
                                     'sincronizando' => 'purple'
                                 ];
                             @endphp
-                            <span class="tag {{ $estadoColors[$estado->estado] ?? 'info' }}">
-                                {{ ucfirst($estado->estado) }}
+                            <span class="tag {{ $estadoColors[$estado['estado_operativo']] ?? 'info' }}">
+                                {{ ucfirst(str_replace('_', ' ', $estado['estado_operativo'])) }}
                             </span>
                         </td>
-                        <td><strong>{{ $estado->score }}</strong></td>
-                        <td>{{ $estado->caja_actual }}</td>
-                        <td>{{ optional($estado->fecha_caja)->format('d/m/Y') }}</td>
-                        <td>${{ number_format($estado->caja_inicial,0,',','.') }}</td>
-                        <td>${{ number_format($estado->caja_final,0,',','.') }}</td>
+                        <td><strong>{{ $estado['score'] }}</strong></td>
+                        <td>{{ $estado['caja_actual'] ?? '—' }}</td>
+                        <td>{{ $estado['fecha_caja'] ?? '—' }}</td>
+                        <td>${{ number_format((float)($estado['caja_inicial'] ?? 0),0,',','.') }}</td>
+                        <td>${{ number_format((float)($estado['caja_final'] ?? 0),0,',','.') }}</td>
                         <td>
                             <div class="progress-mini">
-                                <div class="progress-mini-bar" style="width: {{ $estado->progreso_ruta }}%"></div>
+                                <div class="progress-mini-bar" style="width: {{ $estado['progreso_ruta'] }}%"></div>
                             </div>
-                            <small>{{ $estado->progreso_ruta }}%</small>
+                            <small>{{ $estado['progreso_ruta'] }}%</small>
                         </td>
-                        <td>{{ optional($estado->ultima_sincronizacion)?->diffForHumans() ?? '—' }}</td>
-                        <td><small style="font-family:var(--font-mono);">{{ $estado->pin_dispositivo }}</small></td>
-                        <td>v{{ $estado->version_app }}</td>
+                        <td>{{ $estado['ultima_sync'] }}</td>
+                        <td><small style="font-family:var(--font-mono);">{{ $estado['pin_dispositivo'] ?? '—' }}</small></td>
+                        <td>v{{ $estado['version_app'] ?? '—' }}</td>
                         <td style="text-align:center;">
-                            @if($estado->conectado)
+                            @if($estado['conectado'])
                                 <span class="online-dot"></span>
                             @else
                                 <span class="offline-dot"></span>
@@ -308,18 +308,9 @@
 
 @push('scripts')
 <script>
-    // Tu lógica de JS permanece igual, ya que solo cambiamos clases de estilo
-    async function cargarEstadosCobradores() {
-        try {
-            const response = await fetch("{{ route('admin.cobradores.estado') }}");
-            const data = await response.json();
-            // Aquí podrías actualizar el DOM dinámicamente si lo deseas
-        } catch (e) { console.error("Error cargando estados"); }
-    }
+    // Datos del servidor renderizados en tiempo real (se actualizan al recargar)
 
-    setInterval(() => { cargarEstadosCobradores(); }, 15000);
-
-    // Gráfico Chart.js
+    // Grafico Chart.js
     const data30 = @json($cobros30);
     const ctx = document.getElementById('chart30').getContext('2d');
     new Chart(ctx, {

@@ -152,4 +152,97 @@ class CajaController extends Controller
         return redirect()->route('admin.cajas.show', $cajaCerrada)
             ->with('success', "✅ Caja cerrada. Total cobrado: $" . number_format($cajaCerrada->monto_cobrado, 0, ',', '.'));
     }
+
+    // ── APERTURA MASIVA POR SECTOR ─────────────────────────────────────────────
+
+    public function abrirPorSector(Request $request)
+    {
+        $validated = $request->validate([
+            'sector_id'     => ['required', 'exists:sectores,id'],
+            'monto_inicial' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $sector = Sector::findOrFail($validated['sector_id']);
+
+        $cobradores = User::where('role', 'cobrador')
+            ->where('active', true)
+            ->where('sector_id', $sector->id)
+            ->get();
+
+        if ($cobradores->isEmpty()) {
+            return back()->with('error', "❌ El sector '{$sector->nombre}' no tiene cobradores activos.");
+        }
+
+        $abiertas = 0;
+        $omitidas = 0;
+
+        foreach ($cobradores as $cobrador) {
+            $yaExiste = Caja::where('cobrador_id', $cobrador->id)
+                ->whereDate('fecha_jornada', today())
+                ->where('estado', 'abierta')
+                ->exists();
+
+            if ($yaExiste) {
+                $omitidas++;
+                continue;
+            }
+
+            Caja::create([
+                'codigo'         => Caja::generarCodigo(),
+                'cobrador_id'    => $cobrador->id,
+                'sector_id'      => $sector->id,
+                'abierta_por'    => auth()->id(),
+                'monto_inicial'  => $validated['monto_inicial'],
+                'monto_cobrado'  => 0,
+                'monto_gastos'   => 0,
+                'monto_final'    => 0,
+                'estado'         => 'abierta',
+                'fecha_apertura' => now(),
+                'fecha_jornada'  => today(),
+            ]);
+
+            $abiertas++;
+        }
+
+        $msg = "✅ {$abiertas} cajas abiertas en '{$sector->nombre}'.";
+        if ($omitidas > 0) {
+            $msg .= " {$omitidas} cobradores ya tenían caja abierta.";
+        }
+
+        return redirect()->route('admin.cajas.index')
+            ->with('success', $msg);
+    }
+
+    // ── CIERRE MASIVO POR SECTOR ───────────────────────────────────────────────
+
+    public function cerrarPorSector(Request $request)
+    {
+        $validated = $request->validate([
+            'sector_id' => ['required', 'exists:sectores,id'],
+        ]);
+
+        $sector = Sector::findOrFail($validated['sector_id']);
+
+        $cajasAbiertas = Caja::where('sector_id', $sector->id)
+            ->whereDate('fecha_jornada', today())
+            ->where('estado', 'abierta')
+            ->get();
+
+        if ($cajasAbiertas->isEmpty()) {
+            return back()->with('error', "❌ No hay cajas abiertas hoy en '{$sector->nombre}'.");
+        }
+
+        $cerradas = 0;
+        foreach ($cajasAbiertas as $caja) {
+            $caja->cerrar(
+                cerradaPorId: auth()->id(),
+                gastos      : 0,
+                notas       : 'Cierre masivo por sector',
+            );
+            $cerradas++;
+        }
+
+        return redirect()->route('admin.cajas.index')
+            ->with('success', "✅ {$cerradas} cajas cerradas en '{$sector->nombre}'.");
+    }
 }
