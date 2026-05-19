@@ -30,7 +30,7 @@
     .cs-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.6px; }
     .cs-value { font-size: 22px; font-weight: 700; font-family: var(--font-mono); color: var(--text-1); }
 
-    .filtros { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .filtros { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
     .filtro-btn { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); background: var(--bg-card-2); color: var(--text-2); cursor: pointer; text-decoration: none; transition: all .15s; }
     .filtro-btn:hover { border-color: var(--border-light); color: var(--text-1); }
     .filtro-btn.active { background: var(--accent-glow); border-color: rgba(79,142,247,0.3); color: var(--accent); }

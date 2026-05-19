@@ -38,7 +38,7 @@
         border-radius: var(--radius-lg); overflow: hidden;
     }
 
-    .pago-row { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid rgba(42,46,66,0.5); transition: background .1s; }
+    .pago-row { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid rgba(42,46,66,0.5); transition: background .1s; flex-wrap: wrap; }
     .pago-row:last-child { border-bottom: none; }
     .pago-row:hover { background: var(--bg-card-2); }
 
@@ -65,7 +65,7 @@
     }
 
     /* Pagination */
-    .pagination-wrap { margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .pagination-wrap { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; }
     .page-btn { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--border); background: var(--bg-card-2); color: var(--text-2); text-decoration: none; transition: all .12s; }
     .page-btn:hover { border-color: var(--border-light); color: var(--text-1); }
     .page-btn.active { background: var(--accent-glow); border-color: rgba(79,142,247,0.3); color: var(--accent); }

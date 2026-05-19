@@ -94,6 +94,10 @@
         height: 100%;
         background: linear-gradient(90deg,#7c5cbf,#4da3ff);
     }
+
+    @media (max-width: 900px) {
+        .dashboard-chart-layout { grid-template-columns: 1fr !important; }
+    }
 </style>
 @endpush
 
@@ -128,7 +132,7 @@
 </div>
 
 {{-- CHARTS + COBROS --}}
-<div class="grid" style="grid-template-columns: 1fr 360px; gap: 16px; margin-bottom: 16px;">
+<div class="grid dashboard-chart-layout" style="grid-template-columns: 1fr 360px; gap: 16px; margin-bottom: 16px;">
     <div class="card">
         <div class="card-header">
             <div class="card-title"><i class="fas fa-chart-area"></i> Cobros últimos 30 días</div>

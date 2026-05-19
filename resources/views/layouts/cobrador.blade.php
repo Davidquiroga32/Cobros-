@@ -2,7 +2,7 @@
 <html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SmartPay — @yield('title', 'Dashboard')</title>
 
@@ -63,25 +63,6 @@
         .user-info .name { font-size: 13px; font-weight: 600; color: var(--text-1); line-height: 1.2; }
         .user-info .role-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; color: var(--accent); text-transform: uppercase; }
 
-        /* Admin switch banner */
-        .admin-switch-banner {
-            margin: 10px 12px 0;
-            display: flex; align-items: center; gap: 8px;
-            padding: 9px 12px; border-radius: 10px;
-            background: linear-gradient(135deg, rgba(124,92,191,0.15), rgba(79,142,247,0.08));
-            border: 1px solid rgba(124,92,191,0.3);
-            color: #a78bfa; font-size: 13px; font-weight: 600;
-            text-decoration: none; cursor: pointer;
-            transition: all .15s;
-        }
-        .admin-switch-banner:hover {
-            background: linear-gradient(135deg, rgba(124,92,191,0.25), rgba(79,142,247,0.15));
-            border-color: rgba(124,92,191,0.5);
-            color: #c4b5fd;
-            transform: translateY(-1px);
-        }
-        .admin-switch-banner i { font-size: 13px; }
-
         .sidebar-nav { padding: 12px; flex: 1; overflow-y: auto; }
         .nav-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; color: var(--text-3); text-transform: uppercase; padding: 8px 8px 4px; margin-top: 8px; }
         .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: var(--text-2); font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer; transition: all .15s; margin-bottom: 2px; border: 1px solid transparent; }
@@ -96,7 +77,7 @@
 
         /* ─── MAIN ─────────────────────────────────── */
         .main-wrap { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
-        .topbar { position: sticky; top: 0; z-index: 50; background: rgba(10,11,16,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .topbar { position: sticky; top: 0; z-index: 50; background: rgba(10,11,16,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
         .topbar-title { font-size: 16px; font-weight: 600; color: var(--text-1); }
         .topbar-sub   { font-size: 12px; color: var(--text-2); margin-top: 1px; }
         .page-content { padding: 24px 28px; flex: 1; }
@@ -149,6 +130,10 @@
         .form-grid { display: grid; gap: 16px; }
         .form-grid-2 { grid-template-columns: 1fr 1fr; }
 
+        @media (max-width: 640px) {
+            .form-grid-2 { grid-template-columns: 1fr; }
+        }
+
         .table { width: 100%; border-collapse: collapse; }
         .table th { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-3); padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--border); }
         .table td { padding: 13px 16px; border-bottom: 1px solid rgba(42,46,66,0.5); font-size: 14px; color: var(--text-1); }
@@ -160,15 +145,18 @@
         .flash-success { background: var(--success-soft); color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
         .flash-error   { background: var(--danger-soft);  color: var(--danger);  border: 1px solid rgba(239,68,68,0.2); }
 
-        .mobile-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 200; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 11px; cursor: pointer; color: var(--text-1); font-size: 16px; }
+        .mobile-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 400; width: 40px; height: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-1); font-size: 16px; cursor: pointer; align-items: center; justify-content: center; }
 
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-wrap { margin-left: 0; }
-            .mobile-toggle { display: flex; align-items: center; }
-            .topbar { padding-left: 60px; }
-            .page-content { padding: 18px 16px; }
+            .sidebar { transform: translateX(-100%); transition: transform .25s ease; z-index: 300; }
+            .sidebar.open { transform: translateX(0); box-shadow: 4px 0 30px rgba(0,0,0,0.5); }
+            .main-wrap { margin-left: 0 !important; }
+            .mobile-toggle { display: flex; }
+            .topbar { padding: 12px 16px 12px 64px; }
+            .page-content { padding: 14px 16px; }
+            .topbar-title { font-size: 14px; }
+            .topbar-sub { display: none; }
+            .form-control, select, textarea, input { font-size: 16px !important; }
         }
 
         ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -181,7 +169,9 @@
         .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
         @media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+        @media (max-width: 900px)  { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px)  { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+        @media (max-width: 480px)  { .stat-value { font-size: 22px; } }
 
         .flex { display: flex; } .items-center { align-items: center; } .items-start { align-items: flex-start; }
         .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
@@ -226,15 +216,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Botón volver a admin (solo visible para admins) --}}
-    @if(auth()->user()->isAdmin())
-    <a href="{{ route('admin.dashboard') }}" class="admin-switch-banner">
-        <i class="fas fa-shield-halved"></i>
-        <span>Volver al panel Admin</span>
-        <i class="fas fa-arrow-right" style="margin-left: auto; font-size: 11px; opacity: 0.7;"></i>
-    </a>
-    @endif
 
     <nav class="sidebar-nav">
         <div class="nav-section-label">Principal</div>
@@ -306,12 +287,25 @@
     </main>
 </div>
 
+<div id="sidebarOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:299;"></div>
+
 <script>
     const toggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
-    toggle?.addEventListener('click', () => sidebar.classList.toggle('open'));
+    const overlay = document.getElementById('sidebarOverlay');
+    toggle?.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+    });
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.style.display = 'none';
+    });
     document.addEventListener('click', e => {
-        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) sidebar.classList.remove('open');
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
     });
     setTimeout(() => {
         document.querySelectorAll('.flash-message').forEach(el => {

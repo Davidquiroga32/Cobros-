@@ -19,10 +19,16 @@
     }
     .summary-row {
         display: flex; justify-content: space-between;
+        flex-wrap: wrap; gap: 4px;
         padding: 6px 0; font-size: 13px;
     }
     .summary-label { color: var(--text-2); }
     .summary-value { font-family: var(--font-mono); font-weight: 700; color: var(--text-1); }
+
+    @media (max-width: 640px) {
+        .card-body { padding: 14px; }
+        .card-header { padding: 12px 14px; }
+    }
 </style>
 @endpush
 
@@ -127,7 +133,7 @@
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 10px; margin-top: 16px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-check"></i> Crear credito
                     </button>

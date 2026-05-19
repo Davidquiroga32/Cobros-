@@ -101,6 +101,9 @@
 
     /* Método pago */
     .metodo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    @media (max-width: 480px) {
+        .metodo-grid { grid-template-columns: repeat(2, 1fr); }
+    }
 
     .metodo-opt { display: none; }
 

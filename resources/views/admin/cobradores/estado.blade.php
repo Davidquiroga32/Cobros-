@@ -133,6 +133,11 @@
         font-size: 11px; color: var(--text-3);
         display: flex; align-items: center; gap: 6px;
     }
+
+    @media (max-width: 640px) {
+        .card-body { padding: 12px 14px; }
+        .card-top { padding: 12px 14px; }
+    }
 </style>
 @endpush
 

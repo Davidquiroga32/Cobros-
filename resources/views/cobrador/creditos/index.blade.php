@@ -12,6 +12,7 @@
 <style>
     .credito-row {
         display: flex; align-items: center; gap: 14px;
+        flex-wrap: wrap;
         padding: 14px 20px;
         border-bottom: 1px solid var(--border);
         transition: background .1s;

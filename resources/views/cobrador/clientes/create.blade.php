@@ -19,6 +19,13 @@
     }
     .section-divider i { color: var(--accent); font-size: 12px; }
     .req { color: var(--danger); margin-left: 2px; }
+
+    @media (max-width: 640px) {
+        .card-body { padding: 14px; }
+        .card-header { padding: 12px 14px; }
+        .form-actions { flex-direction: column; }
+        .form-actions .btn { width: 100%; justify-content: center; }
+    }
 </style>
 @endpush
 
@@ -141,7 +148,7 @@
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border);">
+                <div class="form-actions" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border);">
                     <a href="{{ route('cobrador.clientes.index') }}" class="btn btn-secondary">
                         <i class="fas fa-xmark"></i> Cancelar
                     </a>

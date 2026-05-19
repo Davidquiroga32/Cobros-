@@ -45,13 +45,21 @@
     .freq-label .freq-name { font-size: 12px; font-weight: 700; color: var(--text-1); }
     .freq-opt:checked + .freq-label .freq-name { color: var(--accent); }
     .freq-label .freq-desc { font-size: 10px; color: var(--text-2); }
+
+    @media (max-width: 900px) {
+        .create-credito-layout { grid-template-columns: 1fr !important; }
+        .create-credito-layout > div:last-child { position: static !important; }
+    }
+    @media (max-width: 500px) {
+        .freq-grid { grid-template-columns: repeat(2, 1fr); }
+    }
 </style>
 @endpush
 
 @section('content')
 
 <div style="max-width: 900px;">
-    <div class="grid" style="grid-template-columns: 1fr 320px; gap: 20px; align-items: start;">
+    <div class="grid create-credito-layout" style="grid-template-columns: 1fr 320px; gap: 20px; align-items: start;">
 
         {{-- FORMULARIO --}}
         <div class="card">

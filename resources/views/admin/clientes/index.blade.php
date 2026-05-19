@@ -11,7 +11,7 @@
 @push('styles')
 <style>
     .filters-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-    .cliente-row { display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid rgba(37,40,64,0.5); transition: background .1s; }
+    .cliente-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 20px; border-bottom: 1px solid rgba(37,40,64,0.5); transition: background .1s; }
     .cliente-row:hover { background: var(--bg-card-2); }
     .cliente-row:last-child { border-bottom: none; }
     .cl-avatar { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: white; flex-shrink: 0; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }

@@ -27,7 +27,7 @@
         padding: 24px 26px;
         display: flex;
         align-items: flex-start;
-        gap: 20px;
+        gap: 20px; flex-wrap: wrap;
         border-bottom: 1px solid var(--border);
         position: relative;
         overflow: hidden;
@@ -129,6 +129,13 @@
     .resumen-row:last-child { border-bottom: none; }
     .resumen-key { color: var(--text-2); }
     .resumen-val { font-weight: 700; color: var(--text-1); font-family: var(--font-mono); }
+
+    @media (max-width: 640px) {
+        .metrics-grid { grid-template-columns: 1fr; }
+        .hero-caja { flex-wrap: wrap; }
+        .card-body { padding: 14px; }
+        .card-header { padding: 12px 14px; }
+    }
 </style>
 @endpush
 

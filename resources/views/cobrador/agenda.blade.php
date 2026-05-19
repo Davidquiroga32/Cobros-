@@ -19,6 +19,7 @@
 <style>
     .agenda-header {
         display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 12px;
         margin-bottom: 24px;
         padding-bottom: 20px;
         border-bottom: 1px solid var(--border);
@@ -76,6 +77,7 @@
         border-radius: var(--radius);
         padding: 16px 20px;
         display: flex; align-items: center; gap: 16px;
+        flex-wrap: wrap; flex-wrap: wrap;
         margin-bottom: 10px;
         transition: all .15s;
         cursor: default;
@@ -129,6 +131,7 @@
     /* Atrasadas section */
     .atrasadas-toggle {
         display: flex; align-items: center; gap: 10px;
+        flex-wrap: wrap;
         padding: 12px 16px;
         background: var(--danger-soft);
         border: 1px solid rgba(239,68,68,0.2);

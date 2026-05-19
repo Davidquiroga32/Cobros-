@@ -17,6 +17,7 @@
     .detail-value.money { font-family: var(--font-mono); }
     .cuota-item {
         display: flex; align-items: center; gap: 14px;
+        flex-wrap: wrap;
         padding: 10px 16px; border-bottom: 1px solid var(--border);
         font-size: 13px;
     }
@@ -36,7 +37,7 @@
 
 @section('content')
 
-<div class="page-header" style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+<div class="page-header" style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
     <div>
         <div style="font-size: 22px; font-weight: 700; color: var(--text-1); display: flex; align-items: center; gap: 10px;">
             Credito {{ $credito->codigo }}
@@ -168,7 +169,7 @@
         <div class="card-title"><i class="fas fa-receipt"></i> Historial de pagos</div>
         <span class="tag info">{{ $credito->pagos->count() }} pagos</span>
     </div>
-    <div style="overflow-x: auto;">
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table class="table">
             <thead>
                 <tr>

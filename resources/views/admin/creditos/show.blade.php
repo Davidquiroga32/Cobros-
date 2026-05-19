@@ -80,6 +80,8 @@
     @media (max-width: 768px) {
         .stats-band { grid-template-columns: repeat(2, 1fr); }
         .credito-hero { flex-direction: column; }
+        .card-body { padding: 14px; }
+        .card-header { padding: 12px 14px; }
     }
 </style>
 @endpush
@@ -167,6 +169,7 @@
         </div>
     </div>
     <div style="max-height: 400px; overflow-y: auto;">
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table class="table">
             <thead>
                 <tr>
@@ -201,6 +204,7 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 
@@ -211,6 +215,7 @@
         <span class="tag info">{{ $credito->pagos->count() }} pagos</span>
     </div>
     @if($credito->pagos->count() > 0)
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
     <table class="table">
         <thead>
             <tr>
@@ -243,6 +248,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
     @else
     <div class="empty-state" style="padding: 30px;">
         <i class="fas fa-inbox" style="font-size: 28px; color: var(--text-3); display: block; margin-bottom: 8px;"></i>

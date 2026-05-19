@@ -65,6 +65,13 @@
     }
     .proxima-row:last-child { border-bottom: none; }
 
+    canvas { max-width: 100%; }
+    .progress-ring svg { max-width: 100%; height: auto; }
+
+    @media (max-width: 900px) {
+        .dashboard-grid-row { grid-template-columns: 1fr !important; }
+    }
+
     .fecha-badge {
         min-width: 42px; text-align: center;
         background: var(--bg-card-2); border: 1px solid var(--border);
@@ -72,6 +79,10 @@
         font-size: 10px; font-weight: 700; color: var(--text-2); line-height: 1.3;
     }
     .fecha-badge .day { font-size: 18px; font-family: var(--font-mono); font-weight: 700; color: var(--text-1); }
+
+    @media (max-width: 900px) {
+        .dashboard-grid-row { grid-template-columns: 1fr !important; }
+    }
 </style>
 @endpush
 
@@ -123,7 +134,7 @@
 </div>
 
 {{-- ── FILA 2: PROGRESO + BARRAS + COBROS ──────────────────── --}}
-<div class="grid" style="grid-template-columns: 300px 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+<div class="grid dashboard-grid-row" style="grid-template-columns: 300px 1fr 1fr; gap: 16px; margin-bottom: 16px;">
 
     {{-- Anillo de meta --}}
     <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px;">
@@ -166,7 +177,7 @@
             <div class="card-title"><i class="fas fa-chart-bar"></i> Cobros últimos 7 días</div>
         </div>
         <div class="card-body">
-            <canvas id="weekChart" height="120"></canvas>
+            <canvas id="weekChart" height="120" style="max-width: 100%;"></canvas>
         </div>
     </div>
 

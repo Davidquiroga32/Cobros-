@@ -55,7 +55,7 @@
     .estado-parcial { color: var(--warning); background: var(--warning-soft); }
     .estado-parcial::before { background: var(--warning); }
 
-    .pago-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .pago-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
     .pago-item:last-child { border-bottom: none; }
     .pago-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--success-soft); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
     .pago-info { flex: 1; }
@@ -176,6 +176,7 @@
         <div class="card-title"><i class="fas fa-calendar-week"></i> Próximas cuotas</div>
         <span class="tag info">{{ $cuotasProximas->count() }} pendientes</span>
     </div>
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
     <table class="table">
         <thead>
             <tr>

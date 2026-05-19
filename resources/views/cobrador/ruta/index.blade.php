@@ -42,6 +42,7 @@
 
     .parada-item {
         display: flex; align-items: center; gap: 12px;
+        flex-wrap: wrap;
         padding: 14px 16px;
         background: var(--bg-card);
         border: 1px solid var(--border);
@@ -90,7 +91,7 @@
     .modal-box {
         background: var(--bg-card); border: 1px solid var(--border);
         border-radius: var(--radius-lg); padding: 24px;
-        width: 100%; max-width: 420px;
+        width: calc(100% - 32px); max-width: 420px;
     }
     .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--text-1); }
 </style>

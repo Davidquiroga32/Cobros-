@@ -2,7 +2,7 @@
 <html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SmartPay Admin — @yield('title', 'Dashboard')</title>
 
@@ -80,7 +80,7 @@
 
         /* ─── MAIN ─────────────────────────────────── */
         .main-wrap { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
-        .topbar { position: sticky; top: 0; z-index: 50; background: rgba(8,9,16,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .topbar { position: sticky; top: 0; z-index: 50; background: rgba(8,9,16,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
         .topbar-title { font-size: 16px; font-weight: 600; color: var(--text-1); }
         .topbar-sub   { font-size: 12px; color: var(--text-2); margin-top: 1px; }
         .page-content { padding: 24px 28px; flex: 1; }
@@ -150,15 +150,18 @@
         .flash-success { background: var(--success-soft); color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
         .flash-error   { background: var(--danger-soft);  color: var(--danger);  border: 1px solid rgba(239,68,68,0.2); }
 
-        .mobile-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 200; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 11px; cursor: pointer; color: var(--text-1); font-size: 16px; }
+        .mobile-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 400; width: 40px; height: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-1); font-size: 16px; cursor: pointer; align-items: center; justify-content: center; }
 
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-wrap { margin-left: 0; }
-            .mobile-toggle { display: flex; align-items: center; }
-            .topbar { padding-left: 60px; }
-            .page-content { padding: 18px 16px; }
+            .sidebar { transform: translateX(-100%); transition: transform .25s ease; z-index: 300; }
+            .sidebar.open { transform: translateX(0); box-shadow: 4px 0 30px rgba(0,0,0,0.5); }
+            .main-wrap { margin-left: 0 !important; }
+            .mobile-toggle { display: flex; }
+            .topbar { padding: 12px 16px 12px 64px; }
+            .page-content { padding: 14px 16px; }
+            .topbar-title { font-size: 14px; }
+            .topbar-sub { display: none; }
+            .form-control, select, textarea, input { font-size: 16px !important; }
         }
 
         ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -172,7 +175,9 @@
         .grid-5 { grid-template-columns: repeat(5, 1fr); gap: 14px; }
 
         @media (max-width: 1024px) { .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px) { .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; } }
+        @media (max-width: 900px)  { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px)  { .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; } }
+        @media (max-width: 480px)  { .stat-value { font-size: 22px; } }
 
         .flex { display: flex; } .items-center { align-items: center; } .items-start { align-items: flex-start; }
         .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
@@ -186,7 +191,7 @@
         .text-accent { color: var(--accent); } .text-success { color: var(--success); }
         .text-danger { color: var(--danger); } .text-muted { color: var(--text-2); }
 
-        .page-header { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .page-header { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
         .page-header h1 { font-size: 22px; font-weight: 700; color: var(--text-1); }
         .page-header p { font-size: 13px; color: var(--text-2); margin-top: 2px; }
 
@@ -241,14 +246,9 @@
             <i class="fas fa-file-invoice-dollar"></i> Créditos
         </a>
 
-        <div class="nav-section-label">Administración</div>
+        <div class="nav-section-label">Administracion</div>
         <a href="{{ route('admin.usuarios.index') }}" class="nav-item {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
             <i class="fas fa-user-shield"></i> Usuarios
-        </a>
-
-        <div class="nav-section-label">Mi cuenta</div>
-        <a href="{{ route('cobrador.dashboard') }}" class="nav-item">
-            <i class="fas fa-arrow-right-arrow-left"></i> Vista cobrador
         </a>
         <a href="{{ route('admin.cobradores.estado') }}" class="nav-item {{ request()->routeIs('admin.cobradores.estado') ? 'active' : '' }}">
             <i class="fas fa-satellite-dish"></i> Estado operativo
@@ -294,12 +294,25 @@
     </main>
 </div>
 
+<div id="sidebarOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:299;"></div>
+
 <script>
     const toggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
-    toggle?.addEventListener('click', () => sidebar.classList.toggle('open'));
+    const overlay = document.getElementById('sidebarOverlay');
+    toggle?.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+    });
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.style.display = 'none';
+    });
     document.addEventListener('click', e => {
-        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) sidebar.classList.remove('open');
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
     });
     setTimeout(() => {
         document.querySelectorAll('.flash-message').forEach(el => {

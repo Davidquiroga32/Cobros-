@@ -33,7 +33,7 @@
 
     <div>
         @forelse($sectores as $sector)
-        <div style="display: flex; align-items: center; gap: 14px; padding: 14px 20px;
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 20px;
                     border-bottom: 1px solid var(--border); transition: background .1s;"
              class="hover-row">
 

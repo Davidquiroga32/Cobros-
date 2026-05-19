@@ -2,6 +2,15 @@
 
 @section('title', 'Editar Usuario')
 
+@push('styles')
+<style>
+    @media (max-width: 800px) {
+        .edit-usuario-layout { grid-template-columns: 1fr !important; }
+        .edit-usuario-layout > div:last-child { position: static !important; }
+    }
+</style>
+@endpush
+
 @section('topbar-actions')
     <a href="{{ route('admin.usuarios.index') }}" class="btn btn-secondary btn-sm">
         <i class="fas fa-arrow-left"></i> Volver
@@ -11,7 +20,7 @@
 @section('content')
 
 <div style="max-width: 700px;">
-    <div class="grid" style="grid-template-columns: 1fr 280px; gap: 16px; align-items: start;">
+    <div class="grid edit-usuario-layout" style="grid-template-columns: 1fr 280px; gap: 16px; align-items: start;">
 
         <div class="card">
             <div class="card-header">

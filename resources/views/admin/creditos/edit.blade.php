@@ -2,6 +2,14 @@
 
 @section('title', 'Editar Credito')
 
+@push('styles')
+<style>
+    @media (max-width: 500px) {
+        .credito-summary-grid { grid-template-columns: 1fr !important; }
+    }
+</style>
+@endpush
+
 @section('topbar-actions')
     <a href="{{ route('admin.creditos.show', $credito) }}" class="btn btn-secondary btn-sm">
         <i class="fas fa-arrow-left"></i> Volver
@@ -86,7 +94,7 @@
                     </div>
                 </div>
 
-                <div style="padding: 14px 16px; background: var(--bg-card-2); border-radius: 10px; margin-bottom: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
+                <div class="credito-summary-grid" style="padding: 14px 16px; background: var(--bg-card-2); border-radius: 10px; margin-bottom: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
                     <div><span style="color: var(--text-2);">Cuotas:</span> <strong style="font-family: var(--font-mono);">{{ $credito->cuotasPagadas() }} / {{ $credito->num_cuotas }}</strong></div>
                     <div><span style="color: var(--text-2);">Frecuencia:</span> <strong>{{ ucfirst($credito->frecuencia) }}</strong></div>
                     <div><span style="color: var(--text-2);">Total a pagar:</span> <strong style="font-family: var(--font-mono);">${{ number_format($credito->total_a_pagar, 0, ',', '.') }}</strong></div>

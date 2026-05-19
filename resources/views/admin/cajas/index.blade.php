@@ -13,7 +13,7 @@
     .filters-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
     .caja-row {
-        display: flex; align-items: center; gap: 14px;
+        display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
         padding: 14px 20px;
         border-bottom: 1px solid rgba(37,40,64,0.5);
         transition: background .1s;

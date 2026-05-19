@@ -63,6 +63,7 @@
     </div>
 
     @if($creditos->count() > 0)
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
     <table class="table">
         <thead>
             <tr>
@@ -98,6 +99,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 
     @if($creditos->hasPages())
     <div style="padding:16px 20px; border-top:1px solid var(--border);">

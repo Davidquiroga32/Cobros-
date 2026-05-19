@@ -50,6 +50,7 @@
         <a href="{{ route('admin.creditos.create', ['cliente_id' => $cliente->id]) }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Nuevo crédito</a>
     </div>
     @if($cliente->creditos->count() > 0)
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
     <table class="table">
         <thead>
             <tr>
@@ -81,6 +82,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
     @else
     <div class="empty-state" style="padding:30px;">
         <i class="fas fa-file-circle-xmark" style="font-size:28px; color:var(--text-3); display:block; margin-bottom:8px;"></i>
@@ -97,7 +99,7 @@
     </div>
     <div class="card-body">
         @forelse($cliente->pagos as $pago)
-        <div style="display:flex; align-items:center; gap:14px; padding:10px 0; border-bottom:1px solid var(--border);">
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:10px 0; border-bottom:1px solid var(--border);">
             <div style="width:36px; height:36px; border-radius:10px; background:var(--success-soft); color:var(--success); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0;">
                 <i class="fas fa-receipt"></i>
             </div>

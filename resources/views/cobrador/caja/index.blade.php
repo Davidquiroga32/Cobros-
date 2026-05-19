@@ -18,6 +18,7 @@
         padding: 20px 22px;
         border-bottom: 1px solid var(--border);
         display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px;
     }
 
     .caja-abierta-badge {
